@@ -31,6 +31,9 @@ dependencies:
   flutter_redux: ^0.5.4
   built_value: "6.8.2"
   built_collection: "4.2.2"
+  get_it: ^3.0.3
+  connectivity_widget: ^0.1.6
+  flushbar: ^1.9.1
 
 dev_dependencies:
   flutter_test:
