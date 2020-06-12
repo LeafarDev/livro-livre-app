@@ -96,8 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return [autor, titulo];
   }
 
-  percorrerListaYoutube() {}
-
   _extrairYoutube(document) {
     var index = 0;
     _arrayLivro.forEach((value) {
