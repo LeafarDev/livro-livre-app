@@ -1,5 +1,3 @@
-
-
 class AppState {
   String currentAppState = 'resumed';
   int currentBottomBarIndex = 0;

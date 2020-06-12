@@ -16,6 +16,10 @@ class LivroApi {
     multiLine: false,
   );
 
+  openLibraryBookInfo() {
+    //"https://openlibrary.org/api/books?bibkeys=title:Quincas%20Borba&jscmd=data&format=json"
+  }
+
   getAll() async {
     final response = await http.Client()
         .get('http://www.projetolivrolivre.com/search/label/Romance');
@@ -42,6 +46,7 @@ class LivroApi {
     }
     return;
   }
+
   _extrairTituloAutor(document, link) {
     var textoAntesDoLinkComNome = parse(document.body.innerHtml.split(link)[0])
         .documentElement
@@ -52,7 +57,7 @@ class LivroApi {
       //split a partir do ultimo titulo e continua a lógica
       if (textoAntesDoLinkComNome.length > 1) {
         textoAntesDoLinkComNome =
-        textoAntesDoLinkComNome.split(_ultimoTitulo)[1];
+            textoAntesDoLinkComNome.split(_ultimoTitulo)[1];
       }
     }
 
@@ -82,11 +87,11 @@ class LivroApi {
       // verifica se está presente a frente dos titulos a frente do atual
       var achou = false;
       var indexAcima = index + 1;
-      if (index == ( _arrayLivro.length - 1)) {
+      if (index == (_arrayLivro.length - 1)) {
         indexAcima = index;
       }
       var htmlDepoisDoLink2 =
-      document.body.innerHtml.split(_arrayLivro[indexAcima][2])[1];
+          document.body.innerHtml.split(_arrayLivro[indexAcima][2])[1];
       var pedacosHref2 = htmlDepoisDoLink2
           .split('href="https://www.youtube.com/watch?') as List;
       for (var i = 0; i < pedacosHref2.length; i++) {
@@ -105,7 +110,5 @@ class LivroApi {
           '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     });
     print("---------------fim-------------------");
-
   }
-
 }

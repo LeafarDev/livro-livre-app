@@ -1,11 +1,9 @@
-import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:livro_livre_app/page/app.dart';
 import 'package:livro_livre_app/redux/store.dart';
 import 'package:livro_livre_app/util/NavigationService.dart';
 import 'package:livro_livre_app/util/SetupLocator.dart';
-
 
 void main() {
   setupLocator();
@@ -27,4 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

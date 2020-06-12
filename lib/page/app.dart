@@ -14,8 +14,10 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-   super.initState();
-   ConnectivityUtils.initialize( serverToPing: "http://www.google.com", callback: (response) => response.isNotEmpty );
+    super.initState();
+    ConnectivityUtils.initialize(
+        serverToPing: "http://www.google.com",
+        callback: (response) => response.isNotEmpty);
   }
 
   @override

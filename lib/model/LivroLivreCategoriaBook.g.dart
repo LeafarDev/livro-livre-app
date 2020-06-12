@@ -6,34 +6,44 @@ part of categoria_livro;
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<CategoriaLivro> _$categoriaLivroSerializer =
-    new _$CategoriaLivroSerializer();
+Serializer<LivroLivreCategoriaBook> _$livroLivreCategoriaBookSerializer =
+    new _$LivroLivreCategoriaBookSerializer();
 
-class _$CategoriaLivroSerializer
-    implements StructuredSerializer<CategoriaLivro> {
+class _$LivroLivreCategoriaBookSerializer
+    implements StructuredSerializer<LivroLivreCategoriaBook> {
   @override
-  final Iterable<Type> types = const [CategoriaLivro, _$CategoriaLivro];
+  final Iterable<Type> types = const [
+    LivroLivreCategoriaBook,
+    _$LivroLivreCategoriaBook
+  ];
   @override
-  final String wireName = 'CategoriaLivro';
+  final String wireName = 'LivroLivreCategoriaBook';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, CategoriaLivro object,
+  Iterable<Object> serialize(
+      Serializers serializers, LivroLivreCategoriaBook object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'nome',
-      serializers.serialize(object.nome, specifiedType: const FullType(String)),
-      'link',
-      serializers.serialize(object.link, specifiedType: const FullType(String)),
-    ];
-
+    final result = <Object>[];
+    if (object.nome != null) {
+      result
+        ..add('nome')
+        ..add(serializers.serialize(object.nome,
+            specifiedType: const FullType(String)));
+    }
+    if (object.link != null) {
+      result
+        ..add('link')
+        ..add(serializers.serialize(object.link,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
   @override
-  CategoriaLivro deserialize(
+  LivroLivreCategoriaBook deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new CategoriaLivroBuilder();
+    final result = new LivroLivreCategoriaBookBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -56,36 +66,33 @@ class _$CategoriaLivroSerializer
   }
 }
 
-class _$CategoriaLivro extends CategoriaLivro {
+class _$LivroLivreCategoriaBook extends LivroLivreCategoriaBook {
   @override
   final String nome;
   @override
   final String link;
 
-  factory _$CategoriaLivro([void Function(CategoriaLivroBuilder) updates]) =>
-      (new CategoriaLivroBuilder()..update(updates)).build();
+  factory _$LivroLivreCategoriaBook(
+          [void Function(LivroLivreCategoriaBookBuilder) updates]) =>
+      (new LivroLivreCategoriaBookBuilder()..update(updates)).build();
 
-  _$CategoriaLivro._({this.nome, this.link}) : super._() {
-    if (nome == null) {
-      throw new BuiltValueNullFieldError('CategoriaLivro', 'nome');
-    }
-    if (link == null) {
-      throw new BuiltValueNullFieldError('CategoriaLivro', 'link');
-    }
-  }
+  _$LivroLivreCategoriaBook._({this.nome, this.link}) : super._();
 
   @override
-  CategoriaLivro rebuild(void Function(CategoriaLivroBuilder) updates) =>
+  LivroLivreCategoriaBook rebuild(
+          void Function(LivroLivreCategoriaBookBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  CategoriaLivroBuilder toBuilder() =>
-      new CategoriaLivroBuilder()..replace(this);
+  LivroLivreCategoriaBookBuilder toBuilder() =>
+      new LivroLivreCategoriaBookBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is CategoriaLivro && nome == other.nome && link == other.link;
+    return other is LivroLivreCategoriaBook &&
+        nome == other.nome &&
+        link == other.link;
   }
 
   @override
@@ -95,16 +102,17 @@ class _$CategoriaLivro extends CategoriaLivro {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CategoriaLivro')
+    return (newBuiltValueToStringHelper('LivroLivreCategoriaBook')
           ..add('nome', nome)
           ..add('link', link))
         .toString();
   }
 }
 
-class CategoriaLivroBuilder
-    implements Builder<CategoriaLivro, CategoriaLivroBuilder> {
-  _$CategoriaLivro _$v;
+class LivroLivreCategoriaBookBuilder
+    implements
+        Builder<LivroLivreCategoriaBook, LivroLivreCategoriaBookBuilder> {
+  _$LivroLivreCategoriaBook _$v;
 
   String _nome;
   String get nome => _$this._nome;
@@ -114,9 +122,9 @@ class CategoriaLivroBuilder
   String get link => _$this._link;
   set link(String link) => _$this._link = link;
 
-  CategoriaLivroBuilder();
+  LivroLivreCategoriaBookBuilder();
 
-  CategoriaLivroBuilder get _$this {
+  LivroLivreCategoriaBookBuilder get _$this {
     if (_$v != null) {
       _nome = _$v.nome;
       _link = _$v.link;
@@ -126,21 +134,22 @@ class CategoriaLivroBuilder
   }
 
   @override
-  void replace(CategoriaLivro other) {
+  void replace(LivroLivreCategoriaBook other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$CategoriaLivro;
+    _$v = other as _$LivroLivreCategoriaBook;
   }
 
   @override
-  void update(void Function(CategoriaLivroBuilder) updates) {
+  void update(void Function(LivroLivreCategoriaBookBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$CategoriaLivro build() {
-    final _$result = _$v ?? new _$CategoriaLivro._(nome: nome, link: link);
+  _$LivroLivreCategoriaBook build() {
+    final _$result =
+        _$v ?? new _$LivroLivreCategoriaBook._(nome: nome, link: link);
     replace(_$result);
     return _$result;
   }

@@ -1,4 +1,3 @@
-
 class SetCurrentBottomBarIndex {
   final int payload;
 
