@@ -16,16 +16,25 @@ class LivroApi {
     multiLine: false,
   );
 
-  openLibraryBookInfo() {
-    //"https://openlibrary.org/api/books?bibkeys=title:Quincas%20Borba&jscmd=data&format=json"
+  openLibraryBookInfo(titulo, autor) async {
+    titulo = titulo.toString().replaceAll(new RegExp(r'[^\w\s]+'), '');
+    autor = autor.toString().replaceAll(new RegExp(r'[^\w\s]+'), '');
+
+    final response = await http.Client().get(
+        "https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}");
+    print("https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}o");
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print('falha no engano -> openLibraryBookInfo: ' + response.body);
+      return null;
+    }
   }
 
-  getAll() async {
+  getAll({categoria = "romance"}) async {
     final response = await http.Client()
         .get('http://www.projetolivrolivre.com/search/label/Romance');
     print("nada !");
-    print(_regLink.hasMatch(
-        "http://ibamendes.org/Amor%20de%20Perdicao%20-%20Camilo%20Castelo%20Branco%20IBA%20MENDES.pdf"));
     if (response.statusCode == 200) {
       var document = parse(response.body);
       document.body.children.forEach((domPrex.Element element) {
@@ -35,16 +44,19 @@ class LivroApi {
             // pego apenas o link
             var link = part.split('"')[1];
             // show
-            _arrayLivro.add([..._extrairTituloAutor(document, link), link]);
+            _arrayLivro.add([
+              ..._extrairTituloAutor(document, link),
+              ...[link.toString()]
+            ]);
           }
         });
-        //print(_arrayLivro);
-        _extrairYoutube(document);
       });
+      _extrairYoutube(document);
+      return _arrayLivro;
     } else {
       print('falha no engano' + response.body);
+      return [];
     }
-    return;
   }
 
   _extrairTituloAutor(document, link) {
@@ -73,7 +85,7 @@ class LivroApi {
     var titulo = splitTracoTitulo[tamanhosplitTracoTitulo - 1];
 
     _ultimoTitulo = titulo;
-    return [autor, titulo];
+    return [autor.toString(), titulo.toString()];
   }
 
   _extrairYoutube(document) {
@@ -82,8 +94,15 @@ class LivroApi {
       var htmlDepoisDoLink = document.body.innerHtml.split(value[2])[1];
       var pedacosHref = htmlDepoisDoLink
           .split('href="https://www.youtube.com/watch?') as List;
-      var watchYt = pedacosHref[1].split('"')[0];
-      print(watchYt);
+      var watchYt = null;
+      if (pedacosHref.length > 1) {
+        List<String> listaSplityt = pedacosHref[1].split('"') as List;
+
+        watchYt = pedacosHref.length > 0 && listaSplityt.length > 0
+            ? pedacosHref[1].split('"')[0]
+            : null;
+      }
+
       // verifica se está presente a frente dos titulos a frente do atual
       var achou = false;
       var indexAcima = index + 1;
@@ -105,6 +124,10 @@ class LivroApi {
         print("${value[1]}  --- ${watchYt}");
         print("fly high${index}");
       }
+      _arrayLivro[index] = [
+        ..._arrayLivro[index],
+        ...[watchYt]
+      ];
       index++;
       print(
           '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');

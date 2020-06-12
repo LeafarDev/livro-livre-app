@@ -7,15 +7,8 @@ library serializers;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:livro_livre_app/model/Author.dart';
-import 'package:livro_livre_app/model/Classifications.dart';
-import 'package:livro_livre_app/model/Cover.dart';
-import 'package:livro_livre_app/model/Identifier.dart';
-import 'package:livro_livre_app/model/LivroLivreCategoriaBook.dart';
-import 'package:livro_livre_app/model/PublishPlace.dart';
-import 'package:livro_livre_app/model/Publisher.dart';
 
-import 'Book.dart';
+import 'LivroLivreCategoriaBook.dart';
 
 part 'serializers.g.dart';
 
@@ -31,14 +24,7 @@ part 'serializers.g.dart';
 ///
 /// You usually only need to do this once per project.
 @SerializersFor([
-  LivroLivreCategoriaBook,
-  Book,
-  Publisher,
-  Author,
-  Classifications,
-  Cover,
-  Identifier,
-  PublishPlace
+  LivroLivreCategoriaBook
 ])
 Serializers serializers = _$serializers;
 Serializers standardSerializers =
