@@ -7,6 +7,9 @@ library serializers;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:livro_livre_app/model/Book.dart';
+import 'package:livro_livre_app/model/ImageLinks.dart';
+import 'package:livro_livre_app/model/VolumeInfo.dart';
 
 import 'LivroLivreCategoriaBook.dart';
 
@@ -23,9 +26,7 @@ part 'serializers.g.dart';
 /// types needed transitively via fields.
 ///
 /// You usually only need to do this once per project.
-@SerializersFor([
-  LivroLivreCategoriaBook
-])
+@SerializersFor([LivroLivreCategoriaBook, Book, ImageLinks, VolumeInfo])
 Serializers serializers = _$serializers;
 Serializers standardSerializers =
     (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
