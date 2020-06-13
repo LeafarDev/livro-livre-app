@@ -1,6 +1,8 @@
 import 'package:html/dom.dart' as domPrex;
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
+import 'package:livro_livre_app/model/Book.dart';
+import 'package:livro_livre_app/model/GoogleBookSearchResult.dart';
 
 class LivroApi {
   var _ultimoTitulo = "";
@@ -10,23 +12,25 @@ class LivroApi {
     multiLine: false,
   );
   var _arrayLivro = [];
-  var _regLink = new RegExp(
-    r'^\=\"(.+\.(pdf)\")',
-    caseSensitive: false,
-    multiLine: false,
-  );
 
-  openLibraryBookInfo(titulo, autor) async {
-    titulo = titulo.toString().replaceAll(new RegExp(r'[^\w\s]+'), '');
-    autor = autor.toString().replaceAll(new RegExp(r'[^\w\s]+'), '');
+  Future<Book> googleBooksApi(titulo, autor) async {
+    titulo = titulo.toString().replaceAll(
+        new RegExp(r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\ê]+'), '');
+    autor = autor.toString().replaceAll(
+        new RegExp(r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\ê]+'), '');
 
     final response = await http.Client().get(
         "https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}");
-    print("https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}o");
+    print(
+        "https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}");
     if (response.statusCode == 200) {
-      print(response.body);
+      var result = GoogleBookSearchResult.fromJson(response.body);
+      if (result.items.length > 0) {
+        return result.items[0];
+      }
+      return null;
     } else {
-      print('falha no engano -> openLibraryBookInfo: ' + response.body);
+      print('falha no engano -> googleBooksApi: ' + response.body);
       return null;
     }
   }
@@ -83,8 +87,12 @@ class LivroApi {
     var autor = splitAutorInline[splitAutorInline.length - 1];
     // titulo
     var titulo = splitTracoTitulo[tamanhosplitTracoTitulo - 1];
-
     _ultimoTitulo = titulo;
+    titulo = titulo.toString().replaceAll(
+        new RegExp(r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\n\ê]+'), '');
+
+    autor = autor.toString().replaceAll(
+        new RegExp(r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\n\ê]+'), '');
     return [autor.toString(), titulo.toString()];
   }
 
@@ -94,7 +102,7 @@ class LivroApi {
       var htmlDepoisDoLink = document.body.innerHtml.split(value[2])[1];
       var pedacosHref = htmlDepoisDoLink
           .split('href="https://www.youtube.com/watch?') as List;
-      var watchYt = null;
+      var watchYt = "";
       if (pedacosHref.length > 1) {
         List<String> listaSplityt = pedacosHref[1].split('"') as List;
 
@@ -120,10 +128,11 @@ class LivroApi {
         }
       }
       // se não achou adiciono a lista
-      if (achou == false) {
-        print("${value[1]}  --- ${watchYt}");
-        print("fly high${index}");
+      if (achou == true) {
+        watchYt = "";
       }
+      print("${value[1]}  --- $watchYt");
+      print("fly high$index");
       _arrayLivro[index] = [
         ..._arrayLivro[index],
         ...[watchYt]

@@ -2,6 +2,7 @@ import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:livro_livre_app/page/eu/Eu.dart';
 import 'package:livro_livre_app/page/livro/Livros.dart';
 
 class App extends StatefulWidget {
@@ -22,7 +23,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    var paginas = [Livros()];
+    var paginas = [Livros(), Eu()];
     return new WillPopScope(
         onWillPop: () async => false,
         child: ConnectivityWidget(

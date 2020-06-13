@@ -32,6 +32,34 @@ abstract class Book implements Built<Book, BookBuilder> {
   String get selfLink;
 
   @nullable
+  @BuiltValueField(wireName: 'pdfLink')
+  String get pdfLink;
+
+  @nullable
+  @BuiltValueField(wireName: 'extracted_title')
+  String get extractedTitle;
+
+  @nullable
+  @BuiltValueField(wireName: 'extracted_author')
+  String get extractedAuthor;
+
+  @nullable
+  @BuiltValueField(wireName: 'pdf_path')
+  String get pdfPath;
+
+  @nullable
+  @BuiltValueField(wireName: 'current_position_audio')
+  String get currentPositionAudio;
+
+  @nullable
+  @BuiltValueField(wireName: 'audioLink')
+  String get audioLink;
+
+  @nullable
+  @BuiltValueField(wireName: 'current_page')
+  String get currentPage;
+
+  @nullable
   @BuiltValueField(wireName: 'volumeInfo')
   VolumeInfo get volumeInfo;
 
@@ -44,6 +72,28 @@ abstract class Book implements Built<Book, BookBuilder> {
   String toJson() {
     return json
         .encode(standardSerializers.serializeWith(Book.serializer, this));
+  }
+
+  String shortExtractedTitle({textSize = 20}) {
+    if (extractedTitle != null && extractedTitle.length > textSize) {
+      return "${extractedTitle.substring(0, textSize)}...";
+    }
+    return extractedTitle;
+  }
+  String shortExtractedAuthor({textSize = 20}) {
+    if (extractedAuthor != null && extractedAuthor.length > textSize) {
+      return "${extractedAuthor.substring(0, textSize)}...";
+    }
+    return extractedAuthor;
+  }
+
+  Map<String, dynamic> toSqlFormat() {
+    Map<String, dynamic> row = {
+      "id": id,
+      "data": toJson(),
+      "pdf_link": pdfLink
+    };
+    return row;
   }
 
   static Serializer<Book> get serializer => _$bookSerializer;

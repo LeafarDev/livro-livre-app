@@ -84,6 +84,26 @@ abstract class VolumeInfo implements Built<VolumeInfo, VolumeInfoBuilder> {
   @BuiltValueField(wireName: 'canonicalVolumeLink')
   String get canonicalVolumeLink;
 
+  String shortAuthor({textSize = 20}) {
+    if (authors != null) {
+      if (authors != null && authors.length > 0) {
+        if (authors[0].length > textSize) {
+          return "${authors[0].substring(0, textSize)}...";
+        } else {
+          return authors[0];
+        }
+      }
+    }
+    return "";
+  }
+
+  String shortTitle({textSize = 20}) {
+    if (title != null && title.length > textSize) {
+      return "${title.substring(0, textSize)}...";
+    }
+    return title;
+  }
+
   static VolumeInfo fromJson(String jsonString) {
     final parsed = jsonDecode(jsonString);
     VolumeInfo volumeInfo =

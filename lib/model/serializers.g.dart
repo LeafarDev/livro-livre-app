@@ -8,9 +8,13 @@ part of serializers;
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Book.serializer)
+      ..add(GoogleBookSearchResult.serializer)
       ..add(ImageLinks.serializer)
       ..add(LivroLivreCategoriaBook.serializer)
       ..add(VolumeInfo.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Book)]),
+          () => new ListBuilder<Book>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

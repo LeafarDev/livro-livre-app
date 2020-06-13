@@ -42,6 +42,48 @@ class _$BookSerializer implements StructuredSerializer<Book> {
         ..add(serializers.serialize(object.selfLink,
             specifiedType: const FullType(String)));
     }
+    if (object.pdfLink != null) {
+      result
+        ..add('pdfLink')
+        ..add(serializers.serialize(object.pdfLink,
+            specifiedType: const FullType(String)));
+    }
+    if (object.extractedTitle != null) {
+      result
+        ..add('extracted_title')
+        ..add(serializers.serialize(object.extractedTitle,
+            specifiedType: const FullType(String)));
+    }
+    if (object.extractedAuthor != null) {
+      result
+        ..add('extracted_author')
+        ..add(serializers.serialize(object.extractedAuthor,
+            specifiedType: const FullType(String)));
+    }
+    if (object.pdfPath != null) {
+      result
+        ..add('pdf_path')
+        ..add(serializers.serialize(object.pdfPath,
+            specifiedType: const FullType(String)));
+    }
+    if (object.currentPositionAudio != null) {
+      result
+        ..add('current_position_audio')
+        ..add(serializers.serialize(object.currentPositionAudio,
+            specifiedType: const FullType(String)));
+    }
+    if (object.audioLink != null) {
+      result
+        ..add('audioLink')
+        ..add(serializers.serialize(object.audioLink,
+            specifiedType: const FullType(String)));
+    }
+    if (object.currentPage != null) {
+      result
+        ..add('current_page')
+        ..add(serializers.serialize(object.currentPage,
+            specifiedType: const FullType(String)));
+    }
     if (object.volumeInfo != null) {
       result
         ..add('volumeInfo')
@@ -78,6 +120,34 @@ class _$BookSerializer implements StructuredSerializer<Book> {
           result.selfLink = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'pdfLink':
+          result.pdfLink = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'extracted_title':
+          result.extractedTitle = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'extracted_author':
+          result.extractedAuthor = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'pdf_path':
+          result.pdfPath = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'current_position_audio':
+          result.currentPositionAudio = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'audioLink':
+          result.audioLink = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'current_page':
+          result.currentPage = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'volumeInfo':
           result.volumeInfo.replace(serializers.deserialize(value,
               specifiedType: const FullType(VolumeInfo)) as VolumeInfo);
@@ -99,12 +169,38 @@ class _$Book extends Book {
   @override
   final String selfLink;
   @override
+  final String pdfLink;
+  @override
+  final String extractedTitle;
+  @override
+  final String extractedAuthor;
+  @override
+  final String pdfPath;
+  @override
+  final String currentPositionAudio;
+  @override
+  final String audioLink;
+  @override
+  final String currentPage;
+  @override
   final VolumeInfo volumeInfo;
 
   factory _$Book([void Function(BookBuilder) updates]) =>
       (new BookBuilder()..update(updates)).build();
 
-  _$Book._({this.kind, this.id, this.etag, this.selfLink, this.volumeInfo})
+  _$Book._(
+      {this.kind,
+      this.id,
+      this.etag,
+      this.selfLink,
+      this.pdfLink,
+      this.extractedTitle,
+      this.extractedAuthor,
+      this.pdfPath,
+      this.currentPositionAudio,
+      this.audioLink,
+      this.currentPage,
+      this.volumeInfo})
       : super._();
 
   @override
@@ -122,14 +218,39 @@ class _$Book extends Book {
         id == other.id &&
         etag == other.etag &&
         selfLink == other.selfLink &&
+        pdfLink == other.pdfLink &&
+        extractedTitle == other.extractedTitle &&
+        extractedAuthor == other.extractedAuthor &&
+        pdfPath == other.pdfPath &&
+        currentPositionAudio == other.currentPositionAudio &&
+        audioLink == other.audioLink &&
+        currentPage == other.currentPage &&
         volumeInfo == other.volumeInfo;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, kind.hashCode), id.hashCode), etag.hashCode),
-            selfLink.hashCode),
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc($jc(0, kind.hashCode),
+                                                id.hashCode),
+                                            etag.hashCode),
+                                        selfLink.hashCode),
+                                    pdfLink.hashCode),
+                                extractedTitle.hashCode),
+                            extractedAuthor.hashCode),
+                        pdfPath.hashCode),
+                    currentPositionAudio.hashCode),
+                audioLink.hashCode),
+            currentPage.hashCode),
         volumeInfo.hashCode));
   }
 
@@ -140,6 +261,13 @@ class _$Book extends Book {
           ..add('id', id)
           ..add('etag', etag)
           ..add('selfLink', selfLink)
+          ..add('pdfLink', pdfLink)
+          ..add('extractedTitle', extractedTitle)
+          ..add('extractedAuthor', extractedAuthor)
+          ..add('pdfPath', pdfPath)
+          ..add('currentPositionAudio', currentPositionAudio)
+          ..add('audioLink', audioLink)
+          ..add('currentPage', currentPage)
           ..add('volumeInfo', volumeInfo))
         .toString();
   }
@@ -164,6 +292,37 @@ class BookBuilder implements Builder<Book, BookBuilder> {
   String get selfLink => _$this._selfLink;
   set selfLink(String selfLink) => _$this._selfLink = selfLink;
 
+  String _pdfLink;
+  String get pdfLink => _$this._pdfLink;
+  set pdfLink(String pdfLink) => _$this._pdfLink = pdfLink;
+
+  String _extractedTitle;
+  String get extractedTitle => _$this._extractedTitle;
+  set extractedTitle(String extractedTitle) =>
+      _$this._extractedTitle = extractedTitle;
+
+  String _extractedAuthor;
+  String get extractedAuthor => _$this._extractedAuthor;
+  set extractedAuthor(String extractedAuthor) =>
+      _$this._extractedAuthor = extractedAuthor;
+
+  String _pdfPath;
+  String get pdfPath => _$this._pdfPath;
+  set pdfPath(String pdfPath) => _$this._pdfPath = pdfPath;
+
+  String _currentPositionAudio;
+  String get currentPositionAudio => _$this._currentPositionAudio;
+  set currentPositionAudio(String currentPositionAudio) =>
+      _$this._currentPositionAudio = currentPositionAudio;
+
+  String _audioLink;
+  String get audioLink => _$this._audioLink;
+  set audioLink(String audioLink) => _$this._audioLink = audioLink;
+
+  String _currentPage;
+  String get currentPage => _$this._currentPage;
+  set currentPage(String currentPage) => _$this._currentPage = currentPage;
+
   VolumeInfoBuilder _volumeInfo;
   VolumeInfoBuilder get volumeInfo =>
       _$this._volumeInfo ??= new VolumeInfoBuilder();
@@ -178,6 +337,13 @@ class BookBuilder implements Builder<Book, BookBuilder> {
       _id = _$v.id;
       _etag = _$v.etag;
       _selfLink = _$v.selfLink;
+      _pdfLink = _$v.pdfLink;
+      _extractedTitle = _$v.extractedTitle;
+      _extractedAuthor = _$v.extractedAuthor;
+      _pdfPath = _$v.pdfPath;
+      _currentPositionAudio = _$v.currentPositionAudio;
+      _audioLink = _$v.audioLink;
+      _currentPage = _$v.currentPage;
       _volumeInfo = _$v.volumeInfo?.toBuilder();
       _$v = null;
     }
@@ -207,6 +373,13 @@ class BookBuilder implements Builder<Book, BookBuilder> {
               id: id,
               etag: etag,
               selfLink: selfLink,
+              pdfLink: pdfLink,
+              extractedTitle: extractedTitle,
+              extractedAuthor: extractedAuthor,
+              pdfPath: pdfPath,
+              currentPositionAudio: currentPositionAudio,
+              audioLink: audioLink,
+              currentPage: currentPage,
               volumeInfo: _volumeInfo?.build());
     } catch (_) {
       String _$failedField;
