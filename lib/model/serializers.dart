@@ -13,6 +13,7 @@ import 'package:livro_livre_app/model/ImageLinks.dart';
 import 'package:livro_livre_app/model/VolumeInfo.dart';
 
 import 'LivroLivreCategoriaBook.dart';
+import 'YoutubeTaskDownload.dart';
 
 part 'serializers.g.dart';
 
@@ -32,7 +33,8 @@ part 'serializers.g.dart';
   Book,
   ImageLinks,
   VolumeInfo,
-  GoogleBookSearchResult
+  GoogleBookSearchResult,
+  YoutubeTaskDownload
 ])
 Serializers serializers = _$serializers;
 Serializers standardSerializers =

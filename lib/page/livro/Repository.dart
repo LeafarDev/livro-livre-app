@@ -5,9 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:livro_livre_app/database/LivroDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
+import 'package:livro_livre_app/redux/actions.dart';
+import 'package:livro_livre_app/redux/store.dart';
+import 'package:livro_livre_app/util/NavigationService.dart';
+import 'package:livro_livre_app/util/SetupLocator.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -30,6 +35,42 @@ class Repository extends LoadingMoreBase<Container> {
 
   @override
   bool get hasMore => _hasMore || forceRefresh;
+
+  abrirPdf(Book book, filePath) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    Navigator.push(
+      _context,
+      MaterialPageRoute(
+        builder: (context) => PDFView(
+          filePath: filePath,
+          defaultPage: book.currentPage != null ? book.currentPage : 0,
+          enableSwipe: true,
+          swipeHorizontal: false,
+          autoSpacing: false,
+          pageFling: false,
+          onRender: (_pages) {
+            pages = _pages;
+            isReady = true;
+          },
+          onError: (error) {
+            print(error.toString());
+          },
+          onPageError: (page, error) {
+            print('$page: ${error.toString()}');
+          },
+          onViewCreated: (PDFViewController pdfViewController) {
+            _controller.complete(pdfViewController);
+          },
+          onPageChanged: (int page, int total) async {
+            await LivroDatabase().updateCurrentPage(book.id, page);
+          },
+        ),
+      ),
+    );
+  }
 
   generateCard(Book book) {
     return Container(
@@ -69,57 +110,42 @@ class Repository extends LoadingMoreBase<Container> {
                 Row(
                   children: <Widget>[
                     IconButton(
-                      // PRECISO ATUALIZAR PDFPATH E PAGINA ATUAL
                         onPressed: () async {
-                          print("hey");
+                          print("hey:" + book.currentPage.toString());
+                          book = await LivroDatabase().getById(book.id);
                           _controller = Completer<PDFViewController>();
-                          var filePath = book.pdfPath;
-                          if (book.pdfPath != null && book.pdfPath != "") {
-                            createFileOfPdfUrl(book.pdfLink).then((f) {
-                              print(f.path);
-                              print("opening:");
-                              filePath = f.path;
+                          if (book.pdfPath == null || book.pdfPath == "") {
+                            createFileOfPdfUrl(book.pdfLink).then((f) async {
+                              print("preparar, aponta e 2 >>>" +
+                                  f.path.toString() +
+                                  book.currentPage.toString());
+                              await LivroDatabase()
+                                  .updateCurrentPath(book.id, f.path);
+                              abrirPdf(book, f.path);
                             });
+                          } else {
+                            print(">>>>>>>>>>>>" + book.currentPage.toString());
+                            abrirPdf(book, book.pdfPath);
                           }
-
-                          Navigator.push(
-                            _context,
-                            MaterialPageRoute(
-                              builder: (context) => PDFView(
-                                filePath: filePath,
-                                defaultPage: currentPage,
-                                enableSwipe: true,
-                                swipeHorizontal: false,
-                                autoSpacing: false,
-                                pageFling: false,
-                                onRender: (_pages) {
-                                  pages = _pages;
-                                  isReady = true;
-                                },
-                                onError: (error) {
-                                  print(error.toString());
-                                },
-                                onPageError: (page, error) {
-                                  print('$page: ${error.toString()}');
-                                },
-                                onViewCreated:
-                                    (PDFViewController pdfViewController) {
-                                  _controller.complete(pdfViewController);
-                                },
-                                onPageChanged: (int page, int total) {
-                                  currentPage = page;
-                                },
-                              ),
-                            ),
-                          );
                         },
                         icon: Icon(
                           Icons.picture_as_pdf,
                           color: Colors.blue,
                         )),
-                    if (book.audioLink != null && book.audioLink != "")
-                      Icon(
-                        Icons.headset,
+                    if (book.ytCode != null && book.ytCode != "")
+                      IconButton(
+                        onPressed: () {
+                          store.dispatch(SetLivroSendoConsumidoState(book));
+                          store.dispatch(SetTipoMidiaState("AUDIO"));
+                          Navigator.pushNamed(
+                              locator<NavigationService>()
+                                  .navigatorKey
+                                  .currentState
+                                  .overlay
+                                  .context,
+                              '/player');
+                        },
+                        icon: Icon(Icons.headset),
                         color: Colors.blue,
                       ),
                     Icon(
@@ -128,7 +154,7 @@ class Repository extends LoadingMoreBase<Container> {
                     )
                   ],
                 ),
-                Text(book.id),
+                Text(book.ytCode),
               ],
             )
           ],
@@ -144,7 +170,9 @@ class Repository extends LoadingMoreBase<Container> {
     // ARRUMAR DESIGN DA LISTA DE LIVRO
     List<Book> books = await LivroDatabase().all();
     if (books.isNotEmpty && books.length > length) {
-      add(generateCard(books[length]));
+      Book book =
+          await LivroDatabase().getByPdfLink(books[length].pdfLink) as Book;
+      add(generateCard(book));
     } else {
       print("has no more ${_listaLivro.length}");
       _hasMore = false;

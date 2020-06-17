@@ -12,6 +12,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ImageLinks.serializer)
       ..add(LivroLivreCategoriaBook.serializer)
       ..add(VolumeInfo.serializer)
+      ..add(YoutubeTaskDownload.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Book)]),
           () => new ListBuilder<Book>())

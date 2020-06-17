@@ -48,16 +48,20 @@ abstract class Book implements Built<Book, BookBuilder> {
   String get pdfPath;
 
   @nullable
+  @BuiltValueField(wireName: 'audio_path')
+  String get audio_path;
+
+  @nullable
   @BuiltValueField(wireName: 'current_position_audio')
   String get currentPositionAudio;
 
   @nullable
-  @BuiltValueField(wireName: 'audioLink')
-  String get audioLink;
+  @BuiltValueField(wireName: 'ytCode')
+  String get ytCode;
 
   @nullable
   @BuiltValueField(wireName: 'current_page')
-  String get currentPage;
+  int get currentPage;
 
   @nullable
   @BuiltValueField(wireName: 'volumeInfo')
@@ -80,6 +84,7 @@ abstract class Book implements Built<Book, BookBuilder> {
     }
     return extractedTitle;
   }
+
   String shortExtractedAuthor({textSize = 20}) {
     if (extractedAuthor != null && extractedAuthor.length > textSize) {
       return "${extractedAuthor.substring(0, textSize)}...";
