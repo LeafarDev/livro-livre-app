@@ -40,9 +40,11 @@ dependencies:
   auto_size_text: 2.1.0
   path_provider: 1.6.10
   flutter_pdfview: ^1.0.2+3
-  assets_audio_player: ^2.0.4+1
-  youtube_explode_dart: ^1.2.0
+  assets_audio_player: 2.0.3+6
+  youtube_explode_dart: ^1.2.2
   percent_indicator: "^2.1.5"
+  ext_storage: ^1.0.3
+  permission_handler: ^5.0.1
 
 dev_dependencies:
   flutter_test:

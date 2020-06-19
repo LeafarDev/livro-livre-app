@@ -1,8 +1,9 @@
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:livro_livre_app/database/LivroDatabase.dart';
-import 'package:livro_livre_app/util/AudioUtil.dart';
 import 'package:livro_livre_app/util/LivroExtractor.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Eu extends StatefulWidget {
@@ -25,6 +26,13 @@ class EuState extends State<Eu> {
               child: Text('player'),
               onPressed: () async {
                 var db = await openDatabase('projeto_livro_livre.db');
+                var lista = await getExternalStorageDirectories();
+                lista.forEach((element) {
+                  print(element.path);
+                });
+
+                var path = await ExtStorage.getExternalStorageDirectory();
+                print(path);  //
                 // await db.execute('drop table book;');
                 // LivroDatabase().createDatabase();
                 // reload();

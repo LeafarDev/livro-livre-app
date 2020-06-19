@@ -73,10 +73,6 @@ class PlayerState extends State<Player> {
                     progressColor: Colors.green,
                   ),
                 );
-                return Center(
-                  child: Text("baixando ${itemDownload.progresso}%",
-                      style: TextStyle(color: Colors.white)),
-                );
               } else {
                 print(
                     store.state.livroSendoConsumido.currentPositionAsObject());

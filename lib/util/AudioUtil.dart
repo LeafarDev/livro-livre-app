@@ -36,8 +36,8 @@ class AudioUtil {
       var dir = await getExternalStorageDirectory();
       var audio = streams.last;
       var audioStream = yt.videos.streamsClient.get(audio);
-      print("${dir.path}/${book.ytCode}.mp3");
-      var filePath = "${dir.path}/${book.ytCode}.mp3";
+      print("${dir.path}/${book.ytCode}.webm");
+      var filePath = "${dir.path}/${book.ytCode}.webm";
       var file = File(filePath);
 
       // Open the file in appendMode.
@@ -59,7 +59,6 @@ class AudioUtil {
         ..progresso = 0
         ..ultimaAtualizacao = DateTime.now()));
       store.dispatch(setDownloadsState(downloadsYt));
-      List<int> dataAcumulator = [];
       await for (var data in audioStream) {
         count += data.length;
         var progress = ((count / len) * 100).round();
@@ -79,11 +78,7 @@ class AudioUtil {
             }
           }
         }
-        dataAcumulator.addAll(data);
-        if (progress % 10 == 0) {
-          output.add(dataAcumulator);
-          dataAcumulator = [];
-        }
+        output.add(data);
       }
       print("||||||||||||||||||||||||||||||||||||||||||\n");
       await output.close();
