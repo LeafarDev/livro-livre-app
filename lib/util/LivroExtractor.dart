@@ -81,7 +81,7 @@ class LivroExtractor {
         new RegExp(
             r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\n\ê]+'),
         '');
-    return [autor.toString(), titulo.toString()];
+    return [autor.toString().trim().replaceAll('\n', ' '), titulo.toString().trim().replaceAll('\n', ' ')];
   }
 
   _extrairYoutube(document) {

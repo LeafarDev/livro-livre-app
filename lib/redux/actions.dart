@@ -31,12 +31,6 @@ class SetIsPlayingState {
   SetIsPlayingState(this.payload);
 }
 
-class SetCurrentDurationState {
-  final Duration payload;
-
-  SetCurrentDurationState(this.payload);
-}
-
 class setDownloadsState {
   final List<YoutubeTaskDownload> payload;
 

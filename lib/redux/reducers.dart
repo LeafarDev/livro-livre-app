@@ -21,9 +21,6 @@ AppState reducer(AppState prevState, dynamic action) {
   if (action is SetIsPlayingState) {
     newState.isPlaying = action.payload;
   }
-  if (action is SetCurrentDurationState) {
-    newState.currentDuration = action.payload;
-  }
 
   if (action is setDownloadsState) {
     newState.downloadsYt = action.payload;

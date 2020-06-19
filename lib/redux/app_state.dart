@@ -7,13 +7,11 @@ class AppState {
   Book livroSendoConsumido = null;
   String tipoMidia = "PDF"; //PDF ou AUDIO
   bool isPlaying = false; // em caso de audio
-  Duration currentDuration = Duration(); // em caso de audio
   AppState();
   List<YoutubeTaskDownload> downloadsYt = [];
 
   AppState.fromAppState(AppState another) {
     downloadsYt = another.downloadsYt;
-    currentDuration = another.currentDuration;
     currentBottomBarIndex = another.currentBottomBarIndex;
     currentAppState = another.currentAppState;
     livroSendoConsumido = another.livroSendoConsumido;

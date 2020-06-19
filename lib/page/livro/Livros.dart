@@ -18,9 +18,10 @@ class LivrosState extends State<Livros> {
   @override
   Widget build(BuildContext context) {
     Repository repository = Repository(context);
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Lista"),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
+        title: Text("Lista"),
       ),
       body: Container(
         child: LoadingMoreList(

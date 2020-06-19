@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:livro_livre_app/model/serializers.dart';
+import 'package:livro_livre_app/util/AudioUtil.dart';
 
 import 'VolumeInfo.dart';
 
@@ -54,6 +55,14 @@ abstract class Book implements Built<Book, BookBuilder> {
   @nullable
   @BuiltValueField(wireName: 'current_position_audio')
   String get currentPositionAudio;
+
+  Duration currentPositionAsObject () {
+    if (currentPositionAudio != null && currentPositionAudio != "") {
+      return AudioUtil().parseDuration(currentPositionAudio);
+    } else {
+      return Duration();
+    }
+  }
 
   @nullable
   @BuiltValueField(wireName: 'ytCode')

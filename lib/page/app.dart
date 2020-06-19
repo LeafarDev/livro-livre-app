@@ -17,7 +17,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     ConnectivityUtils.initialize(
-        serverToPing: "http://www.google.com",
+        serverToPing: "https://www.cloudflare.com",
         callback: (response) => response.isNotEmpty);
   }
 

@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:livro_livre_app/api/AudioApi.dart';
 import 'package:livro_livre_app/database/LivroDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
 import 'package:livro_livre_app/model/YoutubeTaskDownload.dart';
@@ -14,6 +11,21 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class AudioUtil {
   final yt = YoutubeExplode();
 
+  Duration parseDuration(String s) {
+    int hours = 0;
+    int minutes = 0;
+    int micros;
+    List<String> parts = s.split(':');
+    if (parts.length > 2) {
+      hours = int.parse(parts[parts.length - 3]);
+    }
+    if (parts.length > 1) {
+      minutes = int.parse(parts[parts.length - 2]);
+    }
+    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+    return Duration(hours: hours, minutes: minutes, microseconds: micros);
+  }
+
   callDownloadOrPath(Book book) async {
     StreamManifest manifest =
         await yt.videos.streamsClient.getManifest(book.ytCode);
@@ -22,7 +34,7 @@ class AudioUtil {
 
     if (streams != null) {
       var dir = await getExternalStorageDirectory();
-      var audio = streams.first;
+      var audio = streams.last;
       var audioStream = yt.videos.streamsClient.get(audio);
       print("${dir.path}/${book.ytCode}.mp3");
       var filePath = "${dir.path}/${book.ytCode}.mp3";
@@ -47,6 +59,7 @@ class AudioUtil {
         ..progresso = 0
         ..ultimaAtualizacao = DateTime.now()));
       store.dispatch(setDownloadsState(downloadsYt));
+      List<int> dataAcumulator = [];
       await for (var data in audioStream) {
         count += data.length;
         var progress = ((count / len) * 100).round();
@@ -66,7 +79,11 @@ class AudioUtil {
             }
           }
         }
-        output.add(data);
+        dataAcumulator.addAll(data);
+        if (progress % 10 == 0) {
+          output.add(dataAcumulator);
+          dataAcumulator = [];
+        }
       }
       print("||||||||||||||||||||||||||||||||||||||||||\n");
       await output.close();
@@ -75,38 +92,5 @@ class AudioUtil {
       store.dispatch(SetLivroSendoConsumidoState(bookAtualizado));
       return filePath;
     }
-  }
-
-  Future<String> callDownloadOrPath2(Book book) async {
-    var urlMp3 = await AudioApi().getUrlMp3Api(book.ytCode);
-    createMp3FileFromYtUrl(urlMp3).then((f) async {
-      print(f.path);
-      print(await f.exists());
-      await LivroDatabase().updateCurrentAudioPath(book.id, f.path);
-      var bookAtualizado = await LivroDatabase().getById(book.id);
-      store.dispatch(SetLivroSendoConsumidoState(bookAtualizado));
-      return f.path;
-    });
-  }
-
-  Future<File> createMp3FileFromYtUrl(url) async {
-    Completer<File> completer = Completer();
-    print("Start download file from internet!");
-    try {
-      final filename = url.substring(url.lastIndexOf("/") + 1);
-      var request = await HttpClient().getUrl(Uri.parse(url));
-      var response = await request.close();
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await getExternalStorageDirectory();
-      print("Download files");
-      print("${dir.path}/$filename");
-      File file = File("${dir.path}/$filename.mp3");
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
   }
 }
