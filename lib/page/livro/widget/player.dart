@@ -24,8 +24,16 @@ class Player extends StatefulWidget {
 
 class PlayerState extends State<Player> {
   double _currentPositionSlider = 0;
+
   @override
   Widget build(BuildContext context) {
+    assetsAudioPlayer.playlistAudioFinished.listen((Playing playing) {
+      store.dispatch(SetIsPlayingState(false));
+      assetsAudioPlayer.stop();
+      LivroDatabase().updateCurrentPositionAudio(
+          Duration(hours: 0, minutes: 0, seconds: 0).toString(),
+          store.state.livroSendoConsumido.id);
+    });
     return Scaffold(
       backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
       appBar: AppBar(
@@ -172,43 +180,20 @@ class PlayerState extends State<Player> {
                             },
                           ),
                         ),
-                        if (store.state.isPlaying)
+                        if (store.state.isPlaying &&
+                            assetsAudioPlayer.current.value != null)
                           PlayerBuilder.currentPosition(
                               player: assetsAudioPlayer,
                               builder: (context, duration) {
+                                _currentPositionSlider =
+                                    duration.inMilliseconds.toDouble();
                                 if (store.state.isPlaying) {
                                   LivroDatabase().updateCurrentPositionAudio(
                                       duration.toString(),
                                       store.state.livroSendoConsumido.id);
                                 }
-                                var playing = assetsAudioPlayer.current.value;
-
-                                DateTime total = DateTime.parse(
-                                    "2020-01-10 0${playing.audio.duration}");
-                                final init = DateTime.parse(
-                                    "2020-01-10 00:00:00.000000");
-                                final durationAgora =
-                                    DateTime.parse("2020-01-10 0${duration}");
-
-                                final totalMs =
-                                    total.difference(init).inMilliseconds;
-
-                                final decorridoMs = durationAgora
-                                    .difference(init)
-                                    .inMilliseconds;
-                                //var progressValue = decorridoMs / totalMs;
-                                if (_currentPositionSlider == 0.0) {
-                                  _currentPositionSlider = decorridoMs.toDouble();
-                                }
-                                // return Text("${duration.toString()} de ${playing.audio.duration.toString()}");
                                 return Column(
                                   children: <Widget>[
-                                    /*LinearProgressIndicator(
-                                      backgroundColor: Colors.grey,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.deepOrangeAccent),
-                                      value: progressValue,
-                                    ),*/
                                     SliderTheme(
                                       data: SliderTheme.of(context).copyWith(
                                         activeTrackColor: Colors.red[700],
@@ -236,7 +221,9 @@ class PlayerState extends State<Player> {
                                       child: Slider(
                                         value: _currentPositionSlider,
                                         min: 0,
-                                        max: totalMs.toDouble(),
+                                        max: assetsAudioPlayer.current.value
+                                            .audio.duration.inMilliseconds
+                                            .toDouble(),
                                         divisions: 120,
                                         label:
                                             '${DateTime.fromMillisecondsSinceEpoch(_currentPositionSlider.toInt(), isUtc: true).hour}:'
@@ -245,7 +232,8 @@ class PlayerState extends State<Player> {
                                         onChanged: (value) {
                                           var dttime = DateTime
                                               .fromMillisecondsSinceEpoch(
-                                                  _currentPositionSlider.toInt(),
+                                                  _currentPositionSlider
+                                                      .toInt(),
                                                   isUtc: true);
                                           assetsAudioPlayer.seek(Duration(
                                               hours: dttime.hour,
@@ -260,12 +248,14 @@ class PlayerState extends State<Player> {
                                     Row(
                                       children: <Widget>[
                                         Text(
-                                          "00:00",
+                                          _currentPositionSlider.toString(),
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         Spacer(),
                                         Text(
-                                          "00:00",
+                                          assetsAudioPlayer.current.value.audio
+                                              .duration.inMilliseconds
+                                              .toString(),
                                           style: TextStyle(color: Colors.white),
                                         )
                                       ],
