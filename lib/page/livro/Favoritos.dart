@@ -4,25 +4,25 @@ import 'package:livro_livre_app/page/livro/Repository.dart';
 import 'package:livro_livre_app/page/livro/widget/LivroItem.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 
-class Livros extends StatefulWidget {
+class Favoritos extends StatefulWidget {
   @override
-  LivrosState createState() {
-    return LivrosState();
+  FavoritosState createState() {
+    return FavoritosState();
   }
 }
 
-class LivrosState extends State<Livros> {
+class FavoritosState extends State<Favoritos> {
   initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Repository repository = Repository();
+    Repository repository = Repository(apenasFavoritos: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
-        title: Text("Livros"),
+        title: Text("Meus Livros"),
       ),
       body: Container(
         child: LoadingMoreList(

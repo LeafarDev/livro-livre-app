@@ -53,10 +53,14 @@ abstract class Book implements Built<Book, BookBuilder> {
   String get audio_path;
 
   @nullable
+  @BuiltValueField(wireName: 'favorite')
+  bool get favorite;
+
+  @nullable
   @BuiltValueField(wireName: 'current_position_audio')
   String get currentPositionAudio;
 
-  Duration currentPositionAsObject () {
+  Duration currentPositionAsObject() {
     if (currentPositionAudio != null && currentPositionAudio != "") {
       return AudioUtil().parseDuration(currentPositionAudio);
     } else {

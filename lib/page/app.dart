@@ -3,6 +3,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:livro_livre_app/page/eu/Eu.dart';
+import 'package:livro_livre_app/page/livro/Favoritos.dart';
 import 'package:livro_livre_app/page/livro/Livros.dart';
 
 class App extends StatefulWidget {
@@ -11,7 +12,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int _currentIndex = 1;
+  int _currentIndex = 2;
 
   @override
   void initState() {
@@ -23,7 +24,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    var paginas = [Livros(), Eu()];
+    var paginas = [Livros(), Favoritos(), Eu()];
     return new WillPopScope(
         onWillPop: () async => false,
         child: ConnectivityWidget(

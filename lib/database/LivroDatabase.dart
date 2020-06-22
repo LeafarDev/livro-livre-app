@@ -6,12 +6,6 @@ import 'package:sqflite/sqflite.dart';
 class LivroDatabase {
   var _db;
 
-/*
-  ' pdf_link TEXT,'
-        ' pdf_path TEXT,'
-        ' current_position_audio TEXT,'
-        'current_page INT
- */
   Future<List<Book>> all() async {
     await checagemGeral();
     List<Map> result = await _db.rawQuery('SELECT * FROM book');
@@ -42,37 +36,42 @@ class LivroDatabase {
         .rawUpdate('UPDATE book SET data = ? WHERE id = ?', [data, id]);
   }
 
-  updateCurrentAudioPath(id, currentAudioPath) async {
+  _getBookObject(id) async {
     await checagemGeral();
     Book book = await getById(id);
-    var bookObj = jsonDecode(book.toJson());
+    return jsonDecode(book.toJson());
+  }
+
+  updateCurrentAudioPath(id, currentAudioPath) async {
+    var bookObj = await _getBookObject(id);
     bookObj["audio_path"] = currentAudioPath;
     await updateDataCollum(id, jsonEncode(bookObj));
     return true;
   }
 
   updateCurrentPath(id, currentPath) async {
-    await checagemGeral();
-    Book book = await getById(id);
-    var bookObj = jsonDecode(book.toJson());
+    var bookObj = await _getBookObject(id);
     bookObj["pdf_path"] = currentPath;
     await updateDataCollum(id, jsonEncode(bookObj));
     return true;
   }
 
   updateCurrentPage(id, currentPage) async {
-    await checagemGeral();
-    Book book = await getById(id);
-    var bookObj = jsonDecode(book.toJson());
+    var bookObj = await _getBookObject(id);
     bookObj["current_page"] = currentPage;
     await updateDataCollum(id, jsonEncode(bookObj));
     return true;
   }
 
+  updateFavorite(id, bool isFavorite) async {
+    var bookObj = await _getBookObject(id);
+    bookObj["favorite"] = isFavorite;
+    await updateDataCollum(id, jsonEncode(bookObj));
+    return true;
+  }
+
   updateCurrentPositionAudio(currentPositionAudio, id) async {
-    await checagemGeral();
-    Book book = await getById(id);
-    var bookObj = jsonDecode(book.toJson());
+    var bookObj = await _getBookObject(id);
     bookObj["current_position_audio"] = currentPositionAudio;
     await updateDataCollum(id, jsonEncode(bookObj));
     return true;

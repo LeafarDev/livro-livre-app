@@ -1,27 +1,32 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:livro_livre_app/database/LivroDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
 import 'package:livro_livre_app/redux/actions.dart';
 import 'package:livro_livre_app/redux/store.dart';
 import 'package:livro_livre_app/util/NavigationService.dart';
 import 'package:livro_livre_app/util/PdfUtil.dart';
+import 'package:livro_livre_app/util/PdfViewerPage.dart';
 import 'package:livro_livre_app/util/SetupLocator.dart';
 import 'package:livro_livre_app/util/assetAudioPlayer.dart';
 
-class LivroItem extends StatelessWidget {
+class LivroItem extends StatefulWidget {
   Book _book;
-  Completer<PDFViewController> _controller = Completer<PDFViewController>();
-  int _pages = 0;
-  bool _isReady = false;
 
   LivroItem(this._book);
+
+  @override
+  LivroItemState createState() {
+    return LivroItemState(_book);
+  }
+}
+
+class LivroItemState extends State<LivroItem> {
+  Book _book;
+
+  LivroItemState(this._book);
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +73,11 @@ class LivroItem extends StatelessWidget {
                           store.dispatch(SetIsPlayingState(false));
                           assetsAudioPlayer.stop();
                           print("hey:" + _book.currentPage.toString());
-                          _book = await LivroDatabase().getById(_book.id);
-                          _controller = Completer<PDFViewController>();
+                          var objTemp = await LivroDatabase().getById(_book.id);
+                          setState(() {
+                            _book = objTemp;
+                          });
+
                           if (_book.pdfPath == null || _book.pdfPath == "") {
                             await Flushbar(
                               icon: Icon(
@@ -124,13 +132,50 @@ class LivroItem extends StatelessWidget {
                         icon: Icon(Icons.headset),
                         color: Colors.blue,
                       ),
-                    Icon(
-                      Icons.favorite,
-                      color: Colors.grey,
+                    IconButton(
+                      onPressed: () async {
+                        var title = "Adicionado à sua lista";
+                        var messageFlush = "Verifique em \"Meus Livros\" ";
+                        var isNowFavorite =
+                            _book.favorite == false || _book.favorite == null;
+                        if (isNowFavorite == false) {
+                          title = "Removido de sua lista";
+                          messageFlush =
+                              "Não estará mais disponivel em \"Meus Livros\" ";
+                        }
+                        await Flushbar(
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.white,
+                          ),
+                          flushbarPosition: FlushbarPosition.TOP,
+                          title: title,
+                          backgroundColor: Colors.orangeAccent,
+                          message: messageFlush,
+                          duration: Duration(seconds: 3),
+                        )
+                          ..show(locator<NavigationService>()
+                              .navigatorKey
+                              .currentState
+                              .overlay
+                              .context);
+                        await LivroDatabase()
+                            .updateFavorite(_book.id, isNowFavorite);
+                        var objTemp = await LivroDatabase().getById(_book.id);
+                        setState(() {
+                          _book = objTemp;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.favorite,
+                        color: _book.favorite == true
+                            ? Colors.orangeAccent
+                            : Colors.grey,
+                      ),
                     )
                   ],
                 ),
-                Text(_book.ytCode),
+                Text(_book.favorite.toString()),
               ],
             )
           ],
@@ -140,37 +185,10 @@ class LivroItem extends StatelessWidget {
   }
 
   _abrirPdf(Book book, filePath, context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PDFView(
-          filePath: filePath,
-          defaultPage: book.currentPage != null ? book.currentPage : 0,
-          enableSwipe: true,
-          swipeHorizontal: false,
-          autoSpacing: false,
-          pageFling: false,
-          onRender: (_pages) {
-            _pages = _pages;
-            _isReady = true;
-          },
-          onError: (error) {
-            print(error.toString());
-          },
-          onPageError: (page, error) {
-            print('$page: ${error.toString()}');
-          },
-          onViewCreated: (PDFViewController pdfViewController) {
-            _controller.complete(pdfViewController);
-          },
-          onPageChanged: (int page, int total) async {
-            await LivroDatabase().updateCurrentPage(book.id, page);
-          },
-        ),
+        builder: (context) => PdfViewerPage(_book),
       ),
     );
   }

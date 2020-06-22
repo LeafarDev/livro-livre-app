@@ -72,6 +72,12 @@ class _$BookSerializer implements StructuredSerializer<Book> {
         ..add(serializers.serialize(object.audio_path,
             specifiedType: const FullType(String)));
     }
+    if (object.favorite != null) {
+      result
+        ..add('favorite')
+        ..add(serializers.serialize(object.favorite,
+            specifiedType: const FullType(bool)));
+    }
     if (object.currentPositionAudio != null) {
       result
         ..add('current_position_audio')
@@ -146,6 +152,10 @@ class _$BookSerializer implements StructuredSerializer<Book> {
           result.audio_path = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'favorite':
+          result.favorite = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'current_position_audio':
           result.currentPositionAudio = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -189,6 +199,8 @@ class _$Book extends Book {
   @override
   final String audio_path;
   @override
+  final bool favorite;
+  @override
   final String currentPositionAudio;
   @override
   final String ytCode;
@@ -210,6 +222,7 @@ class _$Book extends Book {
       this.extractedAuthor,
       this.pdfPath,
       this.audio_path,
+      this.favorite,
       this.currentPositionAudio,
       this.ytCode,
       this.currentPage,
@@ -236,6 +249,7 @@ class _$Book extends Book {
         extractedAuthor == other.extractedAuthor &&
         pdfPath == other.pdfPath &&
         audio_path == other.audio_path &&
+        favorite == other.favorite &&
         currentPositionAudio == other.currentPositionAudio &&
         ytCode == other.ytCode &&
         currentPage == other.currentPage &&
@@ -255,15 +269,17 @@ class _$Book extends Book {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, kind.hashCode),
-                                                    id.hashCode),
-                                                etag.hashCode),
-                                            selfLink.hashCode),
-                                        pdfLink.hashCode),
-                                    extractedTitle.hashCode),
-                                extractedAuthor.hashCode),
-                            pdfPath.hashCode),
-                        audio_path.hashCode),
+                                                $jc(
+                                                    $jc($jc(0, kind.hashCode),
+                                                        id.hashCode),
+                                                    etag.hashCode),
+                                                selfLink.hashCode),
+                                            pdfLink.hashCode),
+                                        extractedTitle.hashCode),
+                                    extractedAuthor.hashCode),
+                                pdfPath.hashCode),
+                            audio_path.hashCode),
+                        favorite.hashCode),
                     currentPositionAudio.hashCode),
                 ytCode.hashCode),
             currentPage.hashCode),
@@ -282,6 +298,7 @@ class _$Book extends Book {
           ..add('extractedAuthor', extractedAuthor)
           ..add('pdfPath', pdfPath)
           ..add('audio_path', audio_path)
+          ..add('favorite', favorite)
           ..add('currentPositionAudio', currentPositionAudio)
           ..add('ytCode', ytCode)
           ..add('currentPage', currentPage)
@@ -331,6 +348,10 @@ class BookBuilder implements Builder<Book, BookBuilder> {
   String get audio_path => _$this._audio_path;
   set audio_path(String audio_path) => _$this._audio_path = audio_path;
 
+  bool _favorite;
+  bool get favorite => _$this._favorite;
+  set favorite(bool favorite) => _$this._favorite = favorite;
+
   String _currentPositionAudio;
   String get currentPositionAudio => _$this._currentPositionAudio;
   set currentPositionAudio(String currentPositionAudio) =>
@@ -363,6 +384,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
       _extractedAuthor = _$v.extractedAuthor;
       _pdfPath = _$v.pdfPath;
       _audio_path = _$v.audio_path;
+      _favorite = _$v.favorite;
       _currentPositionAudio = _$v.currentPositionAudio;
       _ytCode = _$v.ytCode;
       _currentPage = _$v.currentPage;
@@ -400,6 +422,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
               extractedAuthor: extractedAuthor,
               pdfPath: pdfPath,
               audio_path: audio_path,
+              favorite: favorite,
               currentPositionAudio: currentPositionAudio,
               ytCode: ytCode,
               currentPage: currentPage,
