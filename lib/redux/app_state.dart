@@ -10,6 +10,7 @@ class AppState {
   AppState();
   List<YoutubeTaskDownload> downloadsYt = [];
   List<String> categorias3 = ["Ensaios"];
+  List<String> selectedCategorias = null;
   List<String> categorias = [
     "Biografia",
     "Carta",
@@ -35,6 +36,7 @@ class AppState {
     "Teologia"
   ];
   AppState.fromAppState(AppState another) {
+    selectedCategorias = selectedCategorias;
     categorias = another.categorias;
     downloadsYt = another.downloadsYt;
     currentBottomBarIndex = another.currentBottomBarIndex;

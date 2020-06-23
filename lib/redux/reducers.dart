@@ -26,5 +26,9 @@ AppState reducer(AppState prevState, dynamic action) {
     newState.downloadsYt = action.payload;
   }
 
+  if (action is setSelectedCategorias) {
+    newState.selectedCategorias = action.payload;
+  }
+
   return newState;
 }

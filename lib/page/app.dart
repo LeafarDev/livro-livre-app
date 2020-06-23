@@ -12,7 +12,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
 
   @override
   void initState() {

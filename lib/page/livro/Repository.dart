@@ -74,8 +74,8 @@ class Repository extends LoadingMoreBase<LivroItem> {
       apenasFavorito = false]) async {
     if (lastSearch != text) {
       lastSearch = text;
-      await clear();
     }
+    await clear();
     var books = await _doSearch(
         text: text, categorias: categorias, apenasFavorito: apenasFavorito);
     if(books.length == 0) {

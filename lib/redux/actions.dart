@@ -37,3 +37,8 @@ class setDownloadsState {
   setDownloadsState(this.payload);
 }
 
+class setSelectedCategorias {
+  final List<String> payload;
+  setSelectedCategorias(this.payload);
+}
+

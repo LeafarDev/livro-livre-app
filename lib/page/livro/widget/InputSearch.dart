@@ -2,6 +2,7 @@ import 'package:filter_list/filter_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:livro_livre_app/page/livro/Repository.dart';
+import 'package:livro_livre_app/redux/actions.dart';
 import 'package:livro_livre_app/redux/store.dart';
 
 class InputSearch extends StatelessWidget {
@@ -13,12 +14,10 @@ class InputSearch extends StatelessWidget {
   TextEditingController _textFieldController = TextEditingController();
   FocusNode _focusNode = FocusNode();
 
-  List<String> selectedCategorias = null;
-
   @override
   Widget build(BuildContext context) {
-    if (selectedCategorias == null) {
-      selectedCategorias = store.state.categorias;
+    if (store.state.selectedCategorias == null) {
+      store.dispatch(setSelectedCategorias(store.state.categorias));
     }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -38,7 +37,7 @@ class InputSearch extends StatelessWidget {
               focusNode: _focusNode,
               onChanged: (value) {
                 _repository.loadData(true, _textFieldController.value.text,
-                    selectedCategorias, _apenasFavoritos);
+                    store.state.selectedCategorias, _apenasFavoritos);
               },
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration.collapsed(
@@ -75,13 +74,12 @@ class InputSearch extends StatelessWidget {
       borderRadius: 20,
       headlineText: "Selecione as categorias",
       searchFieldHintText: "busque aqui",
-      selectedTextList: selectedCategorias,
+      selectedTextList: store.state.selectedCategorias,
     );
-
     if (list != null) {
-      selectedCategorias = List.from(list);
+      store.dispatch(setSelectedCategorias(List.from(list)));
     }
-    _repository.loadData(true, _textFieldController.value.text,
-        selectedCategorias, _apenasFavoritos);
+    await _repository.loadData(true, _textFieldController.value.text,
+        store.state.selectedCategorias, _apenasFavoritos);
   }
 }
