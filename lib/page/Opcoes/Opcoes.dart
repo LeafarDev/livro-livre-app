@@ -6,14 +6,14 @@ import 'package:livro_livre_app/util/LivroExtractor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Eu extends StatefulWidget {
+class Opcoes extends StatefulWidget {
   @override
-  EuState createState() {
-    return EuState();
+  OpcoesState createState() {
+    return OpcoesState();
   }
 }
 
-class EuState extends State<Eu> {
+class OpcoesState extends State<Opcoes> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

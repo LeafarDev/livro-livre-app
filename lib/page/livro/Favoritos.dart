@@ -20,24 +20,22 @@ class FavoritosState extends State<Favoritos> {
   Widget build(BuildContext context) {
     Repository repository = Repository(apenasFavoritos: true);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
-        title: Text("Meus Livros"),
-      ),
-      body: Container(
-        child: LoadingMoreList(
-          ListConfig<LivroItem>(
-            itemBuilder: (BuildContext context, LivroItem item, int index) {
-              return item;
-            },
-            sourceList: repository,
-            padding: EdgeInsets.all(0.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height * 0.25),
-              crossAxisCount: 1,
-              crossAxisSpacing: 3.0,
-              mainAxisSpacing: 3.0,
+        body: SafeArea(
+        child: Container(
+          child: LoadingMoreList(
+            ListConfig<LivroItem>(
+              itemBuilder: (BuildContext context, LivroItem item, int index) {
+                return item;
+              },
+              sourceList: repository,
+              padding: EdgeInsets.all(0.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height * 0.25),
+                crossAxisCount: 1,
+                crossAxisSpacing: 3.0,
+                mainAxisSpacing: 3.0,
+              ),
             ),
           ),
         ),

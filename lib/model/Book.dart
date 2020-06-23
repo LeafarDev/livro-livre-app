@@ -49,6 +49,10 @@ abstract class Book implements Built<Book, BookBuilder> {
   String get pdfPath;
 
   @nullable
+  @BuiltValueField(wireName: 'categoria')
+  String get categoria;
+
+  @nullable
   @BuiltValueField(wireName: 'audio_path')
   String get audio_path;
 

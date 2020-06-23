@@ -32,6 +32,7 @@ class LivroItemState extends State<LivroItem> {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
+        color: Colors.white,
         elevation: 6,
         child: Row(
           children: <Widget>[
@@ -46,13 +47,13 @@ class LivroItemState extends State<LivroItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.only(bottom: 8, top: 8),
                   child: Text(
                     _book.shortExtractedTitle(textSize: 25),
                     style: const TextStyle(
                         fontSize: 17.0,
                         fontStyle: FontStyle.normal,
-                        color: Colors.black,
+                        color: Colors.black45,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -61,7 +62,7 @@ class LivroItemState extends State<LivroItem> {
                   style: const TextStyle(
                     fontSize: 16.0,
                     fontStyle: FontStyle.normal,
-                    color: Colors.black,
+                    color: Colors.black45,
                   ),
                 ),
                 Row(
@@ -86,7 +87,7 @@ class LivroItemState extends State<LivroItem> {
                               ),
                               flushbarPosition: FlushbarPosition.TOP,
                               title: "Fazendo download do PDF",
-                              backgroundColor: Colors.orangeAccent,
+                              backgroundColor: Colors.cyanAccent,
                               message:
                                   "Será aberto assim que finalizar o download",
                               duration: Duration(seconds: 3),
@@ -150,7 +151,7 @@ class LivroItemState extends State<LivroItem> {
                           ),
                           flushbarPosition: FlushbarPosition.TOP,
                           title: title,
-                          backgroundColor: Colors.orangeAccent,
+                          backgroundColor: Colors.cyanAccent,
                           message: messageFlush,
                           duration: Duration(seconds: 3),
                         )
@@ -175,7 +176,6 @@ class LivroItemState extends State<LivroItem> {
                     )
                   ],
                 ),
-                Text(_book.favorite.toString()),
               ],
             )
           ],

@@ -81,7 +81,10 @@ class LivroExtractor {
         new RegExp(
             r'[^\w\à\è\ì\ò\ù\ã\ẽ\ĩ\õ\ũ\s\á\é\í\ó\ú\ç\ô\Á\É\Í\Ó\Ú\À\È\Ì\Ò\Ù\Ã\Ẽ\Ĩ\Õ\Ũ\n\ê]+'),
         '');
-    return [autor.toString().trim().replaceAll('\n', ' '), titulo.toString().trim().replaceAll('\n', ' ')];
+    return [
+      autor.toString().trim().replaceAll('\n', ' '),
+      titulo.toString().trim().replaceAll('\n', ' ')
+    ];
   }
 
   _extrairYoutube(document) {
@@ -169,6 +172,7 @@ class LivroExtractor {
             // adiciona link do pdf e referencia do audio se houver
             var bookObj = jsonDecode(book.toJson());
             bookObj["extracted_title"] = _listaLivro[i][1];
+            bookObj["categoria"] = "romance";
             bookObj["extracted_author"] = _listaLivro[i][0];
             bookObj["pdfLink"] = _listaLivro[i][2];
             bookObj["ytCode"] = _listaLivro[i][3];
@@ -179,6 +183,7 @@ class LivroExtractor {
             // book padrao, caso não haja no google api
             book = Book.fromJson(jsonEncode({
               "id": RandomString(12),
+              "categoria": "romance",
               "pdfLink": _listaLivro[i][2],
               "ytCode": _listaLivro[i][3],
               "extracted_title": _listaLivro[i][1],

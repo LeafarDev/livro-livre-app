@@ -35,9 +35,9 @@ class PlayerState extends State<Player> {
           store.state.livroSendoConsumido.id);
     });
     return Scaffold(
-      backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
+      backgroundColor: Colors.orangeAccent,
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(1, 41, 51, 0.9),
+        backgroundColor: Colors.orangeAccent,
         title: Text("Escutar"),
       ),
       body: SafeArea(

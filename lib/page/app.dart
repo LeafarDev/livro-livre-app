@@ -2,7 +2,7 @@ import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/page/eu/Eu.dart';
+import 'package:livro_livre_app/page/Opcoes/Opcoes.dart';
 import 'package:livro_livre_app/page/livro/Favoritos.dart';
 import 'package:livro_livre_app/page/livro/Livros.dart';
 
@@ -12,7 +12,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    var paginas = [Livros(), Favoritos(), Eu()];
+    var paginas = [Livros(), Favoritos(), Opcoes()];
     return new WillPopScope(
         onWillPop: () async => false,
         child: ConnectivityWidget(
@@ -46,7 +46,7 @@ class _AppState extends State<App> {
             body: paginas[_currentIndex],
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
-              backgroundColor: Color.fromRGBO(1, 41, 51, 1),
+              backgroundColor: Colors.orangeAccent,
               currentIndex: _currentIndex,
               items: _bottomBarList(),
               onTap: (index) {
@@ -85,17 +85,17 @@ class _AppState extends State<App> {
           )),
       BottomNavigationBarItem(
           title: Text(
-            'Eu',
+            'Opções',
             style: TextStyle(color: _itemBottomColor(2)),
           ),
           icon: Icon(
-            Icons.person_outline,
+            Icons.settings,
             color: _itemBottomColor(2),
           )),
     ];
   }
 
   _itemBottomColor(index) {
-    return _currentIndex == index ? Colors.yellowAccent : Colors.white;
+    return _currentIndex == index ? Color.fromRGBO(128, 0, 32, 1) : Colors.white;
   }
 }

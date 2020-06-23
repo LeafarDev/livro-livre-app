@@ -66,6 +66,12 @@ class _$BookSerializer implements StructuredSerializer<Book> {
         ..add(serializers.serialize(object.pdfPath,
             specifiedType: const FullType(String)));
     }
+    if (object.categoria != null) {
+      result
+        ..add('categoria')
+        ..add(serializers.serialize(object.categoria,
+            specifiedType: const FullType(String)));
+    }
     if (object.audio_path != null) {
       result
         ..add('audio_path')
@@ -148,6 +154,10 @@ class _$BookSerializer implements StructuredSerializer<Book> {
           result.pdfPath = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'categoria':
+          result.categoria = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'audio_path':
           result.audio_path = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -197,6 +207,8 @@ class _$Book extends Book {
   @override
   final String pdfPath;
   @override
+  final String categoria;
+  @override
   final String audio_path;
   @override
   final bool favorite;
@@ -221,6 +233,7 @@ class _$Book extends Book {
       this.extractedTitle,
       this.extractedAuthor,
       this.pdfPath,
+      this.categoria,
       this.audio_path,
       this.favorite,
       this.currentPositionAudio,
@@ -248,6 +261,7 @@ class _$Book extends Book {
         extractedTitle == other.extractedTitle &&
         extractedAuthor == other.extractedAuthor &&
         pdfPath == other.pdfPath &&
+        categoria == other.categoria &&
         audio_path == other.audio_path &&
         favorite == other.favorite &&
         currentPositionAudio == other.currentPositionAudio &&
@@ -270,14 +284,18 @@ class _$Book extends Book {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, kind.hashCode),
-                                                        id.hashCode),
-                                                    etag.hashCode),
-                                                selfLink.hashCode),
-                                            pdfLink.hashCode),
-                                        extractedTitle.hashCode),
-                                    extractedAuthor.hashCode),
-                                pdfPath.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(0,
+                                                                kind.hashCode),
+                                                            id.hashCode),
+                                                        etag.hashCode),
+                                                    selfLink.hashCode),
+                                                pdfLink.hashCode),
+                                            extractedTitle.hashCode),
+                                        extractedAuthor.hashCode),
+                                    pdfPath.hashCode),
+                                categoria.hashCode),
                             audio_path.hashCode),
                         favorite.hashCode),
                     currentPositionAudio.hashCode),
@@ -297,6 +315,7 @@ class _$Book extends Book {
           ..add('extractedTitle', extractedTitle)
           ..add('extractedAuthor', extractedAuthor)
           ..add('pdfPath', pdfPath)
+          ..add('categoria', categoria)
           ..add('audio_path', audio_path)
           ..add('favorite', favorite)
           ..add('currentPositionAudio', currentPositionAudio)
@@ -344,6 +363,10 @@ class BookBuilder implements Builder<Book, BookBuilder> {
   String get pdfPath => _$this._pdfPath;
   set pdfPath(String pdfPath) => _$this._pdfPath = pdfPath;
 
+  String _categoria;
+  String get categoria => _$this._categoria;
+  set categoria(String categoria) => _$this._categoria = categoria;
+
   String _audio_path;
   String get audio_path => _$this._audio_path;
   set audio_path(String audio_path) => _$this._audio_path = audio_path;
@@ -383,6 +406,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
       _extractedTitle = _$v.extractedTitle;
       _extractedAuthor = _$v.extractedAuthor;
       _pdfPath = _$v.pdfPath;
+      _categoria = _$v.categoria;
       _audio_path = _$v.audio_path;
       _favorite = _$v.favorite;
       _currentPositionAudio = _$v.currentPositionAudio;
@@ -421,6 +445,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
               extractedTitle: extractedTitle,
               extractedAuthor: extractedAuthor,
               pdfPath: pdfPath,
+              categoria: categoria,
               audio_path: audio_path,
               favorite: favorite,
               currentPositionAudio: currentPositionAudio,
