@@ -290,7 +290,7 @@ class PlayerState extends State<Player> {
       backgroundColor: Colors.orangeAccent,
       message:
           "Pode levar alguns minutos dependendo da conexão, reproduziremos assim que terminar de baixar",
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 9),
     )
       ..show(locator<NavigationService>()
           .navigatorKey

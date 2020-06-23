@@ -91,7 +91,7 @@ class LivroItemState extends State<LivroItem> {
                               backgroundColor: Colors.cyanAccent,
                               message:
                                   "Será aberto assim que finalizar o download",
-                              duration: Duration(seconds: 3),
+                              duration: Duration(seconds: 8),
                             )
                               ..show(locator<NavigationService>()
                                   .navigatorKey
@@ -106,6 +106,10 @@ class LivroItemState extends State<LivroItem> {
                                   _book.currentPage.toString());
                               await LivroDatabase()
                                   .updateCurrentPath(_book.id, f.path);
+                              var objTemp = await LivroDatabase().getById(_book.id);
+                              setState(() {
+                                _book = objTemp;
+                              });
                               _abrirPdf(_book, f.path, context);
                             });
                           } else {
