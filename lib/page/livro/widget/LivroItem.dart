@@ -31,6 +31,7 @@ class LivroItemState extends State<LivroItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: UniqueKey(),
       child: Card(
         color: Colors.white,
         elevation: 6,

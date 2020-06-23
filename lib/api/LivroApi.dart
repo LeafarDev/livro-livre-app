@@ -19,6 +19,9 @@ class LivroApi {
         "https://www.googleapis.com/books/v1/volumes?q=${titulo.toString().trim()} ${autor.toString().trim()}");
     if (response.statusCode == 200) {
       var result = GoogleBookSearchResult.fromJson(response.body);
+      if (result.items == null) {
+        return null;
+      }
       if (result.items.length > 0) {
         return result.items[0];
       }

@@ -10,10 +10,6 @@ class Repository extends LoadingMoreBase<LivroItem> {
   var _apenasFavoritos = false;
   var lastSearch = null;
 
-  Repository({apenasFavoritos = false}) {
-    _apenasFavoritos = apenasFavoritos;
-  }
-
   bool _hasMore = true;
   bool forceRefresh = false;
   var _listaLivro = [];
@@ -22,15 +18,24 @@ class Repository extends LoadingMoreBase<LivroItem> {
   bool get hasMore => _hasMore || forceRefresh;
   var conta = 0;
 
-  _doSearch({text = "", categoria = "", apenasFavorito = false}) async {
+  _doSearch({text = "", categorias = null, apenasFavorito = false}) async {
     var books = await LivroDatabase().all();
     books = await books.where((item) {
       int levenstein = 1;
       if (apenasFavorito == true && item.favorite == false) {
         return false;
       }
-      if (categoria != "" && categoria != item.categoria) {
-        return false;
+      if (categorias != null) {
+        var procuraCategoria = categorias.where((categoria) {
+          if (item.categoria == categoria) {
+            return true;
+          }
+          print("não achou categorias" + item.categoria);
+          return false;
+        });
+        if (procuraCategoria.length == 0) {
+          return false;
+        }
       }
       if (text != "") {
         LongestCommonSubsequence d = new LongestCommonSubsequence();
@@ -42,15 +47,15 @@ class Repository extends LoadingMoreBase<LivroItem> {
         } else {
           levenstein = authorDistance;
         }
-        if (levenstein <= 10) {
-          /* print("levenstein author:::" +
+        if (item.extractedAuthor == "Machado de Assis") {
+          print("levenstein author:::" +
               authorDistance.toString() +
               "/" +
               titleDistance.toString() +
               "::" +
               item.extractedAuthor +
               "/" +
-              item.extractedTitle); */
+              item.extractedTitle);
         }
       }
       if (levenstein <= 10) {
@@ -65,17 +70,21 @@ class Repository extends LoadingMoreBase<LivroItem> {
   Future<bool> loadData(
       [bool isloadMoreAction = false,
       text = "",
-      categoria = "",
+      categorias = null,
       apenasFavorito = false]) async {
-    if(lastSearch != text) {
-      clear();
+    if (lastSearch != text) {
       lastSearch = text;
+      await clear();
     }
     var books = await _doSearch(
-        text: text, categoria: categoria, apenasFavorito: apenasFavorito);
+        text: text, categorias: categorias, apenasFavorito: apenasFavorito);
+    if(books.length == 0) {
+      clear();
+      setState();
+    }
     while (length < books.length) {
       Book book =
-      await LivroDatabase().getByPdfLink(books[length].pdfLink) as Book;
+          await LivroDatabase().getByPdfLink(books[length].pdfLink) as Book;
       add(LivroItem(book));
       setState();
     }

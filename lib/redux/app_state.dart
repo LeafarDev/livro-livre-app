@@ -9,8 +9,33 @@ class AppState {
   bool isPlaying = false; // em caso de audio
   AppState();
   List<YoutubeTaskDownload> downloadsYt = [];
-
+  List<String> categorias3 = ["Ensaios"];
+  List<String> categorias = [
+    "Biografia",
+    "Carta",
+    "Ciência",
+    "Conto",
+    "Crítica",
+    "Crônica",
+    "Educação",
+    "Ensaio",
+    "Filosofia",
+    "História",
+    "Humor",
+    "Infantil",
+    "Linguagem",
+    "Memória",
+    "Miscelânea",
+    "Novela",
+    "Poesia",
+    "Política",
+    "Romance",
+    "Sociologia",
+    "Teatro",
+    "Teologia"
+  ];
   AppState.fromAppState(AppState another) {
+    categorias = another.categorias;
     downloadsYt = another.downloadsYt;
     currentBottomBarIndex = another.currentBottomBarIndex;
     currentAppState = another.currentAppState;

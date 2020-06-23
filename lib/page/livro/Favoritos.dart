@@ -18,7 +18,7 @@ class FavoritosState extends State<Favoritos> {
 
   @override
   Widget build(BuildContext context) {
-    Repository repository = Repository(apenasFavoritos: true);
+    Repository repository = Repository();
     return Scaffold(
         body: SafeArea(
         child: Container(
