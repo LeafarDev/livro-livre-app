@@ -49,6 +49,7 @@ class PlayerState extends State<Player> {
               if (store.state.livroSendoConsumido.audio_path == null ||
                   store.state.livroSendoConsumido.audio_path == "") {
                 _callDownloadMp3();
+                _callDownloadMp3();
                 var itemDownload = YoutubeTaskDownload((b) => b
                   ..id = ""
                   ..progresso = 0

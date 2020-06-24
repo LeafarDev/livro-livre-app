@@ -8,6 +8,7 @@ class AppState {
   String tipoMidia = "PDF"; //PDF ou AUDIO
   bool isPlaying = false; // em caso de audio
   AppState();
+
   List<YoutubeTaskDownload> downloadsYt = [];
   List<String> categorias3 = ["Ensaios"];
   List<String> selectedCategorias = null;
@@ -35,8 +36,11 @@ class AppState {
     "Teatro",
     "Teologia"
   ];
+  List<Book> listaAtualLivros = [];
+
   AppState.fromAppState(AppState another) {
-    selectedCategorias = selectedCategorias;
+    listaAtualLivros = another.listaAtualLivros;
+    selectedCategorias = another.selectedCategorias;
     categorias = another.categorias;
     downloadsYt = another.downloadsYt;
     currentBottomBarIndex = another.currentBottomBarIndex;

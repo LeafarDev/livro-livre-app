@@ -30,5 +30,9 @@ AppState reducer(AppState prevState, dynamic action) {
     newState.selectedCategorias = action.payload;
   }
 
+  if(action is setListaAtualLivros) {
+    newState.listaAtualLivros = action.payload;
+  }
+
   return newState;
 }

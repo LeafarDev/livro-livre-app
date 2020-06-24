@@ -39,6 +39,12 @@ class setDownloadsState {
 
 class setSelectedCategorias {
   final List<String> payload;
+
   setSelectedCategorias(this.payload);
 }
 
+class setListaAtualLivros {
+  final List<Book> payload;
+
+  setListaAtualLivros(this.payload);
+}
