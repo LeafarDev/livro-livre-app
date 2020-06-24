@@ -20,7 +20,7 @@ class ListaLivro extends StatefulWidget {
 
 class ListaLivroState extends State<ListaLivro> {
   bool _apenasFavoritos = false;
-
+  final _key = GlobalKey<FormState>();
   TextEditingController _textFieldController = TextEditingController();
   FocusNode _focusNode = FocusNode();
   bool atualizando = true;
@@ -54,20 +54,28 @@ class ListaLivroState extends State<ListaLivro> {
                   ),
                 if (state.listaAtualLivros.length > 0 && atualizando == false)
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: state.listaAtualLivros.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: LivroItem(state.listaAtualLivros[index]),
-                            ),
-                          ),
-                        );
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
                       },
+                      child: ListView.builder(
+                        itemCount: state.listaAtualLivros.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: LivroItem(state.listaAtualLivros[index]),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   )
               ],
@@ -94,10 +102,11 @@ class ListaLivroState extends State<ListaLivro> {
           ),
           Expanded(
             child: TextField(
+              key: _key,
               controller: _textFieldController,
               focusNode: _focusNode,
-              onChanged: (value) async {
-                await _doSearch(
+              onChanged: (value)  {
+                 _doSearch(
                     text: _textFieldController.value.text,
                     categorias: store.state.selectedCategorias,
                     apenasFavorito: _apenasFavoritos);
