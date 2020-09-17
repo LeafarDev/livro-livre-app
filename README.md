@@ -8,7 +8,8 @@ App que facilita o acesso ao acervo do  [Lab: Projeto Livro Livre](http://www.pr
 ## Desenvolvimento
 
 Se precisar alterar qualquer um dos models, basta executar o comando abaixo:
-$ flutter packages pub run build_runner build --delete-conflicting-outputs
+
+```$ flutter packages pub run build_runner build --delete-conflicting-outputs```
 
 ## Licença
 
