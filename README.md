@@ -3,7 +3,7 @@
 App que facilita o acesso ao acervo do  [Lab: Projeto Livro Livre](http://www.projetolivrolivre.com/) no seu dispositivo.
 
 
-<img height="480px" src="https://im7.ezgif.com/tmp/ezgif-7-b12a0e2ee174.gif">
+<img height="480px" src="https://media.giphy.com/media/Mn5MXw4y2qio0wHJ1E/giphy.gif">
 
 ## Desenvolvimento
 
