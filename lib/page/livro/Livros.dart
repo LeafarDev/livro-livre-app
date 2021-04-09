@@ -19,9 +19,9 @@ class LivrosState extends State<Livros> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child:ListaLivro()
+        child:ListaLivro(apenasFavoritos: false,)
       ),
     );
   }

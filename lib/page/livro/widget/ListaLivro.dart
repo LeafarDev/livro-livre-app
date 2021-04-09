@@ -12,9 +12,13 @@ import 'package:livro_livre_app/redux/store.dart';
 import 'LivroItem.dart';
 
 class ListaLivro extends StatefulWidget {
+  bool apenasFavoritos = false;
+
+  ListaLivro({this.apenasFavoritos});
+
   @override
   ListaLivroState createState() {
-    return ListaLivroState();
+    return ListaLivroState(apenasFavoritos);
   }
 }
 
@@ -24,11 +28,17 @@ class ListaLivroState extends State<ListaLivro> {
   TextEditingController _textFieldController = TextEditingController();
   FocusNode _focusNode = FocusNode();
   bool atualizando = true;
+
+  ListaLivroState(this._apenasFavoritos);
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _doSearch(text: "", categorias: store.state.selectedCategorias);
+    _doSearch(
+        text: "",
+        categorias: store.state.selectedCategorias,
+        apenasFavorito: _apenasFavoritos);
   }
 
   @override
@@ -105,8 +115,8 @@ class ListaLivroState extends State<ListaLivro> {
               key: _key,
               controller: _textFieldController,
               focusNode: _focusNode,
-              onChanged: (value)  {
-                 _doSearch(
+              onChanged: (value) {
+                _doSearch(
                     text: _textFieldController.value.text,
                     categorias: store.state.selectedCategorias,
                     apenasFavorito: _apenasFavoritos);
@@ -137,36 +147,68 @@ class ListaLivroState extends State<ListaLivro> {
   }
 
   void _openFilterList(context) async {
-    print("formula mágica da paz");
-    var list = await FilterList.showFilterList(
+    print("selected >> ${store.state.selectedCategorias}");
+
+    await FilterListDialog.display(
       context,
-      allTextList: store.state.categorias,
+      listData: store.state.categorias,
       applyButonTextBackgroundColor: Colors.orangeAccent,
       height: 450,
       borderRadius: 20,
       headlineText: "Selecione as categorias",
       searchFieldHintText: "busque aqui",
-      selectedTextList: store.state.selectedCategorias,
+      label: (item) {
+        return item;
+      },
+      onItemSearch: (list, text) {
+        if (list.any(
+            (element) => element.toLowerCase().contains(text.toLowerCase()))) {
+          return list
+              .where((element) =>
+                  element.toLowerCase().contains(text.toLowerCase()))
+              .toList();
+        }
+        return [];
+      },
+      onApplyButtonClick: (list) async {
+        if (list != null) {
+          setState(() {
+            store.dispatch(setSelectedCategorias(List.from(list)));
+          });
+          await _doSearch(
+              text: "",
+              categorias: store.state.selectedCategorias,
+              apenasFavorito: _apenasFavoritos);
+        }
+        Navigator.pop(context);
+      },
+      selectedListData: store.state.selectedCategorias,
+      validateSelectedItem: (list, val) {
+        return list.contains(val);
+      },
     );
-    if (list != null) {
-      store.dispatch(setSelectedCategorias(List.from(list)));
-      await _doSearch(
-          text: "",
-          categorias: store.state.selectedCategorias,
-          apenasFavorito: _apenasFavoritos);
-    }
+    // if (list != null) {
+    //   store.dispatch(setSelectedCategorias(List.from(list)));
+    //   await _doSearch(
+    //       text: "",
+    //       categorias: store.state.selectedCategorias,
+    //       apenasFavorito: _apenasFavoritos);
+    // }
   }
 
   _doSearch({text = "", categorias = null, apenasFavorito = false}) async {
-    print("pesquisando");
+    print("pesquisando,,, ${apenasFavorito} ");
     setState(() {
       atualizando = true;
     });
     var books = await LivroDatabase().all();
     books = await books.where((item) {
       int levenstein = 1;
-      if (apenasFavorito == true && item.favorite == false) {
+      if (apenasFavorito == true && item.favorite != true) {
         return false;
+      } else {
+        print("${apenasFavorito} >>>>>>>>>>>>${item.favorite}" +
+            "${item.extractedTitle}");
       }
       if (categorias != null) {
         var procuraCategoria = categorias.where((categoria) {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:livro_livre_app/page/livro/widget/ListaLivro.dart';
 
 class Favoritos extends StatefulWidget {
   @override
@@ -16,12 +17,9 @@ class FavoritosState extends State<Favoritos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Container(
-          child: Center(
-            child: Text("aaa"),
-          ),
-        ),
+          child:ListaLivro(apenasFavoritos: true,)
       ),
     );
   }

@@ -47,7 +47,7 @@ class _PdfViewerPageState extends State<PdfViewerPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: PDFView(
           key: pdfViewerKey,
           pageSnap: true,
