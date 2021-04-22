@@ -1,19 +1,19 @@
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/database/LivroDatabase.dart';
-import 'package:livro_livre_app/util/LivroExtractor.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
+import 'package:livro_livre_app/util/BookExtractor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Opcoes extends StatefulWidget {
+class Options extends StatefulWidget {
   @override
-  OpcoesState createState() {
-    return OpcoesState();
+  OptionsState createState() {
+    return OptionsState();
   }
 }
 
-class OpcoesState extends State<Opcoes> {
+class OptionsState extends State<Options> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -26,15 +26,15 @@ class OpcoesState extends State<Opcoes> {
               child: Text('player'),
               onPressed: () async {
                 var db = await openDatabase('projeto_livro_livre.db');
-                var lista = await getExternalStorageDirectories();
-                lista.forEach((element) {
+                var directoriesList = await getExternalStorageDirectories();
+                directoriesList.forEach((element) {
                   print(element.path);
                 });
 
                 var path = await ExtStorage.getExternalStorageDirectory();
                 print(path);  //
                 // await db.execute('drop table book;');
-                // LivroDatabase().createDatabase();
+                // BookDatabase().createDatabase();
                 // reload();
                 // Get the stream info for the passed video
                 // var dir = await getExternalStorageDirectory();
@@ -47,10 +47,10 @@ class OpcoesState extends State<Opcoes> {
               child: Text('extract'),
               onPressed: () async {
                 var db = await openDatabase('projeto_livro_livre.db');
-                await LivroDatabase().createDatabase();
+                await BookDatabase().createDatabase();
                 await db.execute('drop table book;');
-                await LivroDatabase().createDatabase();
-                await LivroExtractor().processarExtracaoLivro();
+                await BookDatabase().createDatabase();
+                await BookExtractor().processarExtracaoLivro();
                 // Get the stream info for the passed video
                 // var dir = await getExternalStorageDirectory();
 //          audioPlugin.stop();

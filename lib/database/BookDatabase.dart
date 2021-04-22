@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:livro_livre_app/model/Book.dart';
 import 'package:sqflite/sqflite.dart';
 
-class LivroDatabase {
+class BookDatabase {
   var _db;
 
   Future<List<Book>> all() async {

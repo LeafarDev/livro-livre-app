@@ -13,16 +13,16 @@ class SetCurrentAppState {
   SetCurrentAppState(this.payload);
 }
 
-class SetLivroSendoConsumidoState {
+class SetCurrentConsumingBookState {
   final Book payload;
 
-  SetLivroSendoConsumidoState(this.payload);
+  SetCurrentConsumingBookState(this.payload);
 }
 
-class SetTipoMidiaState {
+class SetMediaTypeState {
   final String payload;
 
-  SetTipoMidiaState(this.payload);
+  SetMediaTypeState(this.payload);
 }
 
 class SetIsPlayingState {
@@ -37,14 +37,14 @@ class setDownloadsState {
   setDownloadsState(this.payload);
 }
 
-class setSelectedCategorias {
+class setSelectedCategories {
   final List<String> payload;
 
-  setSelectedCategorias(this.payload);
+  setSelectedCategories(this.payload);
 }
 
-class setListaAtualLivros {
+class setCurrentBooksList {
   final List<Book> payload;
 
-  setListaAtualLivros(this.payload);
+  setCurrentBooksList(this.payload);
 }

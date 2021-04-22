@@ -4,41 +4,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:livro_livre_app/database/LivroDatabase.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
 import 'package:livro_livre_app/redux/actions.dart';
 import 'package:livro_livre_app/redux/app_state.dart';
 import 'package:livro_livre_app/redux/store.dart';
+import 'BookWidgetItem.dart';
 
-import 'LivroItem.dart';
+class BookList extends StatefulWidget {
+  bool onlyFavorites = false;
 
-class ListaLivro extends StatefulWidget {
-  bool apenasFavoritos = false;
-
-  ListaLivro({this.apenasFavoritos});
+  BookList({this.onlyFavorites});
 
   @override
-  ListaLivroState createState() {
-    return ListaLivroState(apenasFavoritos);
+  BookListState createState() {
+    return BookListState(onlyFavorites);
   }
 }
 
-class ListaLivroState extends State<ListaLivro> {
-  bool _apenasFavoritos = false;
+class BookListState extends State<BookList> {
+  bool _onlyFavorites = false;
   final _key = GlobalKey<FormState>();
   TextEditingController _textFieldController = TextEditingController();
   FocusNode _focusNode = FocusNode();
-  bool atualizando = true;
+  bool updating = true;
 
-  ListaLivroState(this._apenasFavoritos);
+  BookListState(this._onlyFavorites);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _doSearch(
         text: "",
-        categorias: store.state.selectedCategorias,
-        apenasFavorito: _apenasFavoritos);
+        categories: store.state.selectedCategories,
+        apenasFavorito: _onlyFavorites);
   }
 
   @override
@@ -49,11 +47,11 @@ class ListaLivroState extends State<ListaLivro> {
           distinct: true,
           converter: (store) => store.state,
           builder: (context, state) {
-            print("rebuild" + state.listaAtualLivros.length.toString());
+            print("rebuild" + state.currentBookList.length.toString());
             return Column(
               children: <Widget>[
                 _inputSearch(context),
-                if (state.listaAtualLivros.length == 0 || atualizando)
+                if (state.currentBookList.length == 0 || updating)
                   Expanded(
                     child: Center(
                       child: Text(
@@ -62,7 +60,7 @@ class ListaLivroState extends State<ListaLivro> {
                       ),
                     ),
                   ),
-                if (state.listaAtualLivros.length > 0 && atualizando == false)
+                if (state.currentBookList.length > 0 && updating == false)
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
@@ -72,7 +70,7 @@ class ListaLivroState extends State<ListaLivro> {
                         }
                       },
                       child: ListView.builder(
-                        itemCount: state.listaAtualLivros.length,
+                        itemCount: state.currentBookList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
@@ -80,7 +78,7 @@ class ListaLivroState extends State<ListaLivro> {
                             child: SlideAnimation(
                               verticalOffset: 50.0,
                               child: FadeInAnimation(
-                                child: LivroItem(state.listaAtualLivros[index]),
+                                child: BookWidgetItem(state.currentBookList[index]),
                               ),
                             ),
                           );
@@ -95,8 +93,8 @@ class ListaLivroState extends State<ListaLivro> {
   }
 
   _inputSearch(context) {
-    if (store.state.selectedCategorias == null) {
-      store.dispatch(setSelectedCategorias(store.state.categorias));
+    if (store.state.selectedCategories == null) {
+      store.dispatch(setSelectedCategories(store.state.categories));
     }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -118,8 +116,8 @@ class ListaLivroState extends State<ListaLivro> {
               onChanged: (value) {
                 _doSearch(
                     text: _textFieldController.value.text,
-                    categorias: store.state.selectedCategorias,
-                    apenasFavorito: _apenasFavoritos);
+                    categories: store.state.selectedCategories,
+                    apenasFavorito: _onlyFavorites);
               },
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration.collapsed(
@@ -134,7 +132,7 @@ class ListaLivroState extends State<ListaLivro> {
             onPressed: () {
               //[bool isloadMoreAction = false,
               //      text = "",
-              //      categoria = "",
+              //      category = "",
               //      apenasFavorito = false]_repository.loadData(false,_textFieldController.value.text);
               //_textFieldController.value.text
               // _textFieldController.clear();
@@ -147,25 +145,25 @@ class ListaLivroState extends State<ListaLivro> {
   }
 
   void _openFilterList(context) async {
-    print("selected >> ${store.state.selectedCategorias}");
+    print("selected >> ${store.state.selectedCategories}");
 
     await FilterListDialog.display(
       context,
-      listData: store.state.categorias,
+      listData: store.state.categories,
       applyButonTextBackgroundColor: Colors.orangeAccent,
       height: 450,
       borderRadius: 20,
-      headlineText: "Selecione as categorias",
+      headlineText: "Selecione as categories",
       searchFieldHintText: "busque aqui",
       label: (item) {
         return item;
       },
       onItemSearch: (list, text) {
         if (list.any(
-            (element) => element.toLowerCase().contains(text.toLowerCase()))) {
+                (element) => element.toLowerCase().contains(text.toLowerCase()))) {
           return list
               .where((element) =>
-                  element.toLowerCase().contains(text.toLowerCase()))
+              element.toLowerCase().contains(text.toLowerCase()))
               .toList();
         }
         return [];
@@ -173,35 +171,35 @@ class ListaLivroState extends State<ListaLivro> {
       onApplyButtonClick: (list) async {
         if (list != null) {
           setState(() {
-            store.dispatch(setSelectedCategorias(List.from(list)));
+            store.dispatch(setSelectedCategories(List.from(list)));
           });
           await _doSearch(
               text: "",
-              categorias: store.state.selectedCategorias,
-              apenasFavorito: _apenasFavoritos);
+              categories: store.state.selectedCategories,
+              apenasFavorito: _onlyFavorites);
         }
         Navigator.pop(context);
       },
-      selectedListData: store.state.selectedCategorias,
+      selectedListData: store.state.selectedCategories,
       validateSelectedItem: (list, val) {
         return list.contains(val);
       },
     );
     // if (list != null) {
-    //   store.dispatch(setSelectedCategorias(List.from(list)));
+    //   store.dispatch(setSelectedCategories(List.from(list)));
     //   await _doSearch(
     //       text: "",
-    //       categorias: store.state.selectedCategorias,
-    //       apenasFavorito: _apenasFavoritos);
+    //       categories: store.state.selectedCategorias,
+    //       apenasFavorito: _onlyFavorites);
     // }
   }
 
-  _doSearch({text = "", categorias = null, apenasFavorito = false}) async {
+  _doSearch({text = "", categories = null, apenasFavorito = false}) async {
     print("pesquisando,,, ${apenasFavorito} ");
     setState(() {
-      atualizando = true;
+      updating = true;
     });
-    var books = await LivroDatabase().all();
+    var books = await BookDatabase().all();
     books = await books.where((item) {
       int levenstein = 1;
       if (apenasFavorito == true && item.favorite != true) {
@@ -210,15 +208,15 @@ class ListaLivroState extends State<ListaLivro> {
         print("${apenasFavorito} >>>>>>>>>>>>${item.favorite}" +
             "${item.extractedTitle}");
       }
-      if (categorias != null) {
-        var procuraCategoria = categorias.where((categoria) {
-          if (item.categoria == categoria) {
+      if (categories != null) {
+        var categorySearch = categories.where((category) {
+          if (item.category == category) {
             return true;
           }
           return false;
         });
-        // print("não achou categorias" + item.categoria);
-        if (procuraCategoria.length == 0) {
+        // print("não found categories" + item.category);
+        if (categorySearch.length == 0) {
           return false;
         }
       }
@@ -250,10 +248,10 @@ class ListaLivroState extends State<ListaLivro> {
     }).toList();
     books.sort((a, b) =>
         a.extractedTitle.toString().compareTo(b.extractedTitle.toString()));
-    store.dispatch(setListaAtualLivros(books));
+    store.dispatch(setCurrentBooksList(books));
     print("pesquisado" + books.length.toString());
     setState(() {
-      atualizando = false;
+      updating = false;
     });
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/page/livro/widget/ListaLivro.dart';
+import 'package:livro_livre_app/page/book/widget/BookList.dart';
 
-class Favoritos extends StatefulWidget {
+class Favorites extends StatefulWidget {
   @override
-  FavoritosState createState() {
-    return FavoritosState();
+  FavoritesState createState() {
+    return FavoritesState();
   }
 }
 
-class FavoritosState extends State<Favoritos> {
+class FavoritesState extends State<Favorites> {
   initState() {
     super.initState();
   }
@@ -19,7 +19,7 @@ class FavoritosState extends State<Favoritos> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child:ListaLivro(apenasFavoritos: true,)
+          child:BookList(onlyFavorites: true,)
       ),
     );
   }

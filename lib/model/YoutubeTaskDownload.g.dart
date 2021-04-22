@@ -26,11 +26,11 @@ class _$YoutubeTaskDownloadSerializer
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
-      'progresso',
-      serializers.serialize(object.progresso,
+      'progress',
+      serializers.serialize(object.progress,
           specifiedType: const FullType(int)),
-      'ultimaAtualizacao',
-      serializers.serialize(object.ultimaAtualizacao,
+      'lastUpdate',
+      serializers.serialize(object.lastUpdate,
           specifiedType: const FullType(DateTime)),
     ];
 
@@ -53,12 +53,12 @@ class _$YoutubeTaskDownloadSerializer
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'progresso':
-          result.progresso = serializers.deserialize(value,
+        case 'progress':
+          result.progress = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'ultimaAtualizacao':
-          result.ultimaAtualizacao = serializers.deserialize(value,
+        case 'lastUpdate':
+          result.lastUpdate = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
           break;
       }
@@ -72,25 +72,24 @@ class _$YoutubeTaskDownload extends YoutubeTaskDownload {
   @override
   final String id;
   @override
-  final int progresso;
+  final int progress;
   @override
-  final DateTime ultimaAtualizacao;
+  final DateTime lastUpdate;
 
   factory _$YoutubeTaskDownload(
           [void Function(YoutubeTaskDownloadBuilder) updates]) =>
       (new YoutubeTaskDownloadBuilder()..update(updates)).build();
 
-  _$YoutubeTaskDownload._({this.id, this.progresso, this.ultimaAtualizacao})
+  _$YoutubeTaskDownload._({this.id, this.progress, this.lastUpdate})
       : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('YoutubeTaskDownload', 'id');
     }
-    if (progresso == null) {
-      throw new BuiltValueNullFieldError('YoutubeTaskDownload', 'progresso');
+    if (progress == null) {
+      throw new BuiltValueNullFieldError('YoutubeTaskDownload', 'progress');
     }
-    if (ultimaAtualizacao == null) {
-      throw new BuiltValueNullFieldError(
-          'YoutubeTaskDownload', 'ultimaAtualizacao');
+    if (lastUpdate == null) {
+      throw new BuiltValueNullFieldError('YoutubeTaskDownload', 'lastUpdate');
     }
   }
 
@@ -108,22 +107,22 @@ class _$YoutubeTaskDownload extends YoutubeTaskDownload {
     if (identical(other, this)) return true;
     return other is YoutubeTaskDownload &&
         id == other.id &&
-        progresso == other.progresso &&
-        ultimaAtualizacao == other.ultimaAtualizacao;
+        progress == other.progress &&
+        lastUpdate == other.lastUpdate;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, id.hashCode), progresso.hashCode),
-        ultimaAtualizacao.hashCode));
+    return $jf(
+        $jc($jc($jc(0, id.hashCode), progress.hashCode), lastUpdate.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('YoutubeTaskDownload')
           ..add('id', id)
-          ..add('progresso', progresso)
-          ..add('ultimaAtualizacao', ultimaAtualizacao))
+          ..add('progress', progress)
+          ..add('lastUpdate', lastUpdate))
         .toString();
   }
 }
@@ -136,22 +135,21 @@ class YoutubeTaskDownloadBuilder
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  int _progresso;
-  int get progresso => _$this._progresso;
-  set progresso(int progresso) => _$this._progresso = progresso;
+  int _progress;
+  int get progress => _$this._progress;
+  set progress(int progress) => _$this._progress = progress;
 
-  DateTime _ultimaAtualizacao;
-  DateTime get ultimaAtualizacao => _$this._ultimaAtualizacao;
-  set ultimaAtualizacao(DateTime ultimaAtualizacao) =>
-      _$this._ultimaAtualizacao = ultimaAtualizacao;
+  DateTime _lastUpdate;
+  DateTime get lastUpdate => _$this._lastUpdate;
+  set lastUpdate(DateTime lastUpdate) => _$this._lastUpdate = lastUpdate;
 
   YoutubeTaskDownloadBuilder();
 
   YoutubeTaskDownloadBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _progresso = _$v.progresso;
-      _ultimaAtualizacao = _$v.ultimaAtualizacao;
+      _progress = _$v.progress;
+      _lastUpdate = _$v.lastUpdate;
       _$v = null;
     }
     return this;
@@ -174,7 +172,7 @@ class YoutubeTaskDownloadBuilder
   _$YoutubeTaskDownload build() {
     final _$result = _$v ??
         new _$YoutubeTaskDownload._(
-            id: id, progresso: progresso, ultimaAtualizacao: ultimaAtualizacao);
+            id: id, progress: progress, lastUpdate: lastUpdate);
     replace(_$result);
     return _$result;
   }

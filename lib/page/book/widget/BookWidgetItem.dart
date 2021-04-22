@@ -2,31 +2,31 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/database/LivroDatabase.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
 import 'package:livro_livre_app/redux/actions.dart';
 import 'package:livro_livre_app/redux/store.dart';
 import 'package:livro_livre_app/util/NavigationService.dart';
 import 'package:livro_livre_app/util/PdfUtil.dart';
-import 'package:livro_livre_app/util/PdfViewerPage.dart';
+import 'package:open_file/open_file.dart';
 import 'package:livro_livre_app/util/SetupLocator.dart';
 import 'package:livro_livre_app/util/assetAudioPlayer.dart';
 
-class LivroItem extends StatefulWidget {
+class BookWidgetItem extends StatefulWidget {
   Book _book;
 
-  LivroItem(this._book);
+  BookWidgetItem(this._book);
 
   @override
-  LivroItemState createState() {
-    return LivroItemState(_book);
+  BookWidgetItemState createState() {
+    return BookWidgetItemState(_book);
   }
 }
 
-class LivroItemState extends State<LivroItem> {
+class BookWidgetItemState extends State<BookWidgetItem> {
   Book _book;
 
-  LivroItemState(this._book);
+  BookWidgetItemState(this._book);
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +69,12 @@ class LivroItemState extends State<LivroItem> {
                   children: <Widget>[
                     IconButton(
                         onPressed: () async {
-                          store.dispatch(SetLivroSendoConsumidoState(_book));
-                          store.dispatch(SetTipoMidiaState("PDF"));
+                          store.dispatch(SetCurrentConsumingBookState(_book));
+                          store.dispatch(SetMediaTypeState("PDF"));
                           store.dispatch(SetIsPlayingState(false));
                           assetsAudioPlayer.stop();
                           print("hey:" + _book.currentPage.toString());
-                          var objTemp = await LivroDatabase().getById(_book.id);
+                          var objTemp = await BookDatabase().getById(_book.id);
                           setState(() {
                             _book = objTemp;
                           });
@@ -103,18 +103,18 @@ class LivroItemState extends State<LivroItem> {
                               print("preparar, aponta e 2 >>>" +
                                   f.path.toString() +
                                   _book.currentPage.toString());
-                              await LivroDatabase()
+                              await BookDatabase()
                                   .updateCurrentPath(_book.id, f.path);
-                              var objTemp = await LivroDatabase().getById(_book.id);
+                              var objTemp = await BookDatabase().getById(_book.id);
                               setState(() {
                                 _book = objTemp;
                               });
-                              _abrirPdf(_book, f.path, context);
+                              _openPdf(_book, f.path, context);
                             });
                           } else {
                             print(
                                 ">>>>>>>>>>>>" + _book.currentPage.toString());
-                            _abrirPdf(_book, _book.pdfPath, context);
+                            _openPdf(_book, _book.pdfPath, context);
                           }
                         },
                         icon: Icon(
@@ -124,8 +124,8 @@ class LivroItemState extends State<LivroItem> {
                     if (_book.ytCode != null && _book.ytCode != "")
                       IconButton(
                         onPressed: () {
-                          store.dispatch(SetLivroSendoConsumidoState(_book));
-                          store.dispatch(SetTipoMidiaState("AUDIO"));
+                          store.dispatch(SetCurrentConsumingBookState(_book));
+                          store.dispatch(SetMediaTypeState("AUDIO"));
                           Navigator.pushNamed(
                               locator<NavigationService>()
                                   .navigatorKey
@@ -140,13 +140,13 @@ class LivroItemState extends State<LivroItem> {
                     IconButton(
                       onPressed: () async {
                         var title = "Adicionado à sua lista";
-                        var messageFlush = "Verifique em \"Meus Livros\" ";
+                        var messageFlush = "Verifique em \"Meus Books\" ";
                         var isNowFavorite =
                             _book.favorite == false || _book.favorite == null;
                         if (isNowFavorite == false) {
                           title = "Removido de sua lista";
                           messageFlush =
-                              "Não estará mais disponivel em \"Meus Livros\" ";
+                              "Não estará mais disponivel em \"Meus Books\" ";
                         }
                         await Flushbar(
                           icon: Icon(
@@ -164,9 +164,9 @@ class LivroItemState extends State<LivroItem> {
                               .currentState
                               .overlay
                               .context);
-                        await LivroDatabase()
+                        await BookDatabase()
                             .updateFavorite(_book.id, isNowFavorite);
-                        var objTemp = await LivroDatabase().getById(_book.id);
+                        var objTemp = await BookDatabase().getById(_book.id);
                         setState(() {
                           _book = objTemp;
                         });
@@ -188,12 +188,13 @@ class LivroItemState extends State<LivroItem> {
     );
   }
 
-  _abrirPdf(Book book, filePath, context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PdfViewerPage(_book),
-      ),
-    );
+  _openPdf(Book book, filePath, context) {
+    OpenFile.open(book.pdfPath);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => PdfViewerPage(_book),
+    //   ),
+    // );
   }
 }

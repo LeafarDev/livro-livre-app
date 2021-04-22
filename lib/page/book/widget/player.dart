@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:livro_livre_app/database/LivroDatabase.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
 import 'package:livro_livre_app/model/YoutubeTaskDownload.dart';
 import 'package:livro_livre_app/redux/actions.dart';
 import 'package:livro_livre_app/redux/app_state.dart';
@@ -12,8 +12,8 @@ import 'package:livro_livre_app/util/AudioUtil.dart';
 import 'package:livro_livre_app/util/NavigationService.dart';
 import 'package:livro_livre_app/util/SetupLocator.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-
 import '../../../util/assetAudioPlayer.dart';
+import 'package:intl/intl.dart';
 
 class Player extends StatefulWidget {
   @override
@@ -30,9 +30,9 @@ class PlayerState extends State<Player> {
     assetsAudioPlayer.playlistAudioFinished.listen((Playing playing) {
       store.dispatch(SetIsPlayingState(false));
       assetsAudioPlayer.stop();
-      LivroDatabase().updateCurrentPositionAudio(
+      BookDatabase().updateCurrentPositionAudio(
           Duration(hours: 0, minutes: 0, seconds: 0).toString(),
-          store.state.livroSendoConsumido.id);
+          store.state.currentConsumingBook.id);
     });
     return Scaffold(
       backgroundColor: Colors.orangeAccent,
@@ -46,33 +46,31 @@ class PlayerState extends State<Player> {
             converter: (store) => store.state,
             rebuildOnChange: true,
             builder: (context, state) {
-              if (store.state.livroSendoConsumido.audio_path == null ||
-                  store.state.livroSendoConsumido.audio_path == "") {
-                _callDownloadMp3();
+              if (store.state.currentConsumingBook.audio_path == null ||
+                  store.state.currentConsumingBook.audio_path == "") {
                 _callDownloadMp3();
                 var itemDownload = YoutubeTaskDownload((b) => b
                   ..id = ""
-                  ..progresso = 0
-                  ..ultimaAtualizacao = DateTime.now());
+                  ..progress = 0
+                  ..lastUpdate = DateTime.now());
                 for (var i = 0; i < state.downloadsYt.length; i++) {
                   if (state.downloadsYt[i].id ==
-                      store.state.livroSendoConsumido.ytCode) {
+                      store.state.currentConsumingBook.ytCode) {
                     itemDownload = state.downloadsYt[i];
                   }
                 }
-
                 return Center(
                   child: CircularPercentIndicator(
                     radius: 150.0,
                     lineWidth: 13.0,
                     animation: true,
-                    percent: itemDownload.progresso / 100,
+                    percent: itemDownload.progress / 100,
                     center: Text(
-                      "${itemDownload.progresso}%",
+                      "${itemDownload.progress}%",
                       style: TextStyle(color: Colors.white),
                     ),
                     footer: Text(
-                      "Baixando: \"${store.state.livroSendoConsumido.extractedTitle}\"",
+                      "Baixando: \"${store.state.currentConsumingBook.extractedTitle}\"",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17.0,
@@ -84,7 +82,7 @@ class PlayerState extends State<Player> {
                 );
               } else {
                 print(
-                    store.state.livroSendoConsumido.currentPositionAsObject());
+                    store.state.currentConsumingBook.currentPositionAsObject());
                 return Padding(
                   padding: const EdgeInsets.only(left: 40, right: 40),
                   child: Center(
@@ -93,16 +91,16 @@ class PlayerState extends State<Player> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CachedNetworkImage(
-                            imageUrl: store.state.livroSendoConsumido.volumeInfo
+                            imageUrl: store.state.currentConsumingBook.volumeInfo
                                         .imageLinks !=
                                     null
-                                ? store.state.livroSendoConsumido.volumeInfo
+                                ? store.state.currentConsumingBook.volumeInfo
                                     .imageLinks.thumbnail
                                 : 'https://text2image.com/user_images/202006/text2image_B9421546_20200613_190803.png'),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10, top: 10),
                           child: Text(
-                            store.state.livroSendoConsumido.extractedTitle
+                            store.state.currentConsumingBook.extractedTitle
                                 .replaceAll('\n', ' '),
                             style: const TextStyle(
                                 fontSize: 17.0,
@@ -125,29 +123,27 @@ class PlayerState extends State<Player> {
                             ),
                             onPressed: () async {
                               if (store.state.isPlaying == false) {
-                                //audioPlugin.play(
-                                //  store.state.livroSendoConsumido.audio_path);
                                 await assetsAudioPlayer.open(
                                   Audio.file(
-                                    store.state.livroSendoConsumido.audio_path,
+                                    store.state.currentConsumingBook.audio_path,
                                     metas: Metas(
-                                      title: store.state.livroSendoConsumido
+                                      title: store.state.currentConsumingBook
                                           .extractedTitle,
-                                      artist: store.state.livroSendoConsumido
+                                      artist: store.state.currentConsumingBook
                                           .extractedAuthor
                                           .trim(),
                                       image: MetasImage.network(store
                                                   .state
-                                                  .livroSendoConsumido
+                                                  .currentConsumingBook
                                                   .volumeInfo
                                                   .imageLinks !=
                                               null
-                                          ? store.state.livroSendoConsumido
+                                          ? store.state.currentConsumingBook
                                               .volumeInfo.imageLinks.thumbnail
                                           : 'https://text2image.com/user_images/202006/text2image_B9421546_20200613_190803.png'),
                                     ),
                                   ),
-                                  seek: store.state.livroSendoConsumido
+                                  seek: store.state.currentConsumingBook
                                       .currentPositionAsObject(),
                                   showNotification: true,
                                   notificationSettings: NotificationSettings(
@@ -189,10 +185,12 @@ class PlayerState extends State<Player> {
                                 _currentPositionSlider =
                                     duration.inMilliseconds.toDouble();
                                 if (store.state.isPlaying) {
-                                  LivroDatabase().updateCurrentPositionAudio(
+                                  BookDatabase().updateCurrentPositionAudio(
                                       duration.toString(),
-                                      store.state.livroSendoConsumido.id);
+                                      store.state.currentConsumingBook.id);
                                 }
+                                final formatDuration =
+                                    new DateFormat('hh:mm:ss');
                                 return Column(
                                   children: <Widget>[
                                     SliderTheme(
@@ -226,10 +224,10 @@ class PlayerState extends State<Player> {
                                             .audio.duration.inMilliseconds
                                             .toDouble(),
                                         divisions: 120,
-                                        label:
-                                            '${DateTime.fromMillisecondsSinceEpoch(_currentPositionSlider.toInt(), isUtc: true).hour}:'
-                                            '${DateTime.fromMillisecondsSinceEpoch(_currentPositionSlider.toInt(), isUtc: true).minute}:'
-                                            '${DateTime.fromMillisecondsSinceEpoch(_currentPositionSlider.toInt(), isUtc: true).second}',
+                                        label: formatDuration.format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                _currentPositionSlider.toInt(),
+                                                isUtc: true)),
                                         onChanged: (value) {
                                           var dttime = DateTime
                                               .fromMillisecondsSinceEpoch(
@@ -249,14 +247,25 @@ class PlayerState extends State<Player> {
                                     Row(
                                       children: <Widget>[
                                         Text(
-                                          _currentPositionSlider.toString(),
+                                          formatDuration.format(DateTime
+                                              .fromMillisecondsSinceEpoch(
+                                                  _currentPositionSlider
+                                                      .toInt(),
+                                                  isUtc: true)),
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         Spacer(),
                                         Text(
-                                          assetsAudioPlayer.current.value.audio
-                                              .duration.inMilliseconds
-                                              .toString(),
+                                          formatDuration.format(DateTime
+                                              .fromMillisecondsSinceEpoch(
+                                                  assetsAudioPlayer
+                                                      .current
+                                                      .value
+                                                      .audio
+                                                      .duration
+                                                      .inMilliseconds
+                                                      .toInt(),
+                                                  isUtc: true)),
                                           style: TextStyle(color: Colors.white),
                                         )
                                       ],
@@ -277,7 +286,7 @@ class PlayerState extends State<Player> {
   _callDownloadMp3() async {
     var downloadsYt = store.state.downloadsYt;
     for (var i = 0; i < downloadsYt.length; i++) {
-      if (downloadsYt[i].id == store.state.livroSendoConsumido.ytCode) {
+      if (downloadsYt[i].id == store.state.currentConsumingBook.ytCode) {
         return;
       }
     }
@@ -298,6 +307,6 @@ class PlayerState extends State<Player> {
           .currentState
           .overlay
           .context);
-    await AudioUtil().callDownloadOrPath(store.state.livroSendoConsumido);
+    await AudioUtil().callDownloadOrPath(store.state.currentConsumingBook);
   }
 }

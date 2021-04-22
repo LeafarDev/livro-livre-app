@@ -18,11 +18,11 @@ abstract class YoutubeTaskDownload
   @BuiltValueField(wireName: 'id')
   String get id;
 
-  @BuiltValueField(wireName: 'progresso')
-  int get progresso;
+  @BuiltValueField(wireName: 'progress')
+  int get progress;
 
-  @BuiltValueField(wireName: 'ultimaAtualizacao')
-  DateTime get ultimaAtualizacao;
+  @BuiltValueField(wireName: 'lastUpdate')
+  DateTime get lastUpdate;
 
   static YoutubeTaskDownload fromJson(String jsonString) {
     final parsed = jsonDecode(jsonString);

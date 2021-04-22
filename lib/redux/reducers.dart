@@ -10,12 +10,12 @@ AppState reducer(AppState prevState, dynamic action) {
   if (action is SetCurrentAppState) {
     newState.currentAppState = action.payload;
   }
-  if (action is SetLivroSendoConsumidoState) {
-    newState.livroSendoConsumido = action.payload;
+  if (action is SetCurrentConsumingBookState) {
+    newState.currentConsumingBook = action.payload;
   }
 
-  if (action is SetTipoMidiaState) {
-    newState.tipoMidia = action.payload;
+  if (action is SetMediaTypeState) {
+    newState.mediaType = action.payload;
   }
 
   if (action is SetIsPlayingState) {
@@ -26,12 +26,12 @@ AppState reducer(AppState prevState, dynamic action) {
     newState.downloadsYt = action.payload;
   }
 
-  if (action is setSelectedCategorias) {
-    newState.selectedCategorias = action.payload;
+  if (action is setSelectedCategories) {
+    newState.selectedCategories = action.payload;
   }
 
-  if(action is setListaAtualLivros) {
-    newState.listaAtualLivros = action.payload;
+  if(action is setCurrentBooksList) {
+    newState.currentBookList = action.payload;
   }
 
   return newState;

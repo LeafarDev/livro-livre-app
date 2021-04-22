@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:livro_livre_app/database/LivroDatabase.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
 import 'package:livro_livre_app/model/YoutubeTaskDownload.dart';
 import 'package:livro_livre_app/redux/actions.dart';
@@ -56,8 +56,8 @@ class AudioUtil {
       // setDownloadsState
       downloadsYt.add(YoutubeTaskDownload((b) => b
         ..id = book.ytCode
-        ..progresso = 0
-        ..ultimaAtualizacao = DateTime.now()));
+        ..progress = 0
+        ..lastUpdate = DateTime.now()));
       store.dispatch(setDownloadsState(downloadsYt));
       await for (var data in audioStream) {
         count += data.length;
@@ -65,14 +65,14 @@ class AudioUtil {
         if (progress != oldProgress) {
           print('$progress%');
           oldProgress = progress;
-          // update progresso
+          // update progress
           downloadsYt = store.state.downloadsYt;
           for (var i = 0; i < downloadsYt.length; i++) {
             if (downloadsYt[i].id == book.ytCode) {
               downloadsYt[i] = YoutubeTaskDownload((b) => b
                 ..id = book.ytCode
-                ..progresso = progress
-                ..ultimaAtualizacao = DateTime.now());
+                ..progress = progress
+                ..lastUpdate = DateTime.now());
               store.dispatch(setDownloadsState(downloadsYt));
               break;
             }
@@ -82,9 +82,9 @@ class AudioUtil {
       }
       print("||||||||||||||||||||||||||||||||||||||||||\n");
       await output.close();
-      await LivroDatabase().updateCurrentAudioPath(book.id, filePath);
-      var bookAtualizado = await LivroDatabase().getById(book.id);
-      store.dispatch(SetLivroSendoConsumidoState(bookAtualizado));
+      await BookDatabase().updateCurrentAudioPath(book.id, filePath);
+      var bookAtualizado = await BookDatabase().getById(book.id);
+      store.dispatch(SetCurrentConsumingBookState(bookAtualizado));
       return filePath;
     }
   }

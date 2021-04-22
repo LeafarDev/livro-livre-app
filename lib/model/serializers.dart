@@ -12,7 +12,7 @@ import 'package:livro_livre_app/model/GoogleBookSearchResult.dart';
 import 'package:livro_livre_app/model/ImageLinks.dart';
 import 'package:livro_livre_app/model/VolumeInfo.dart';
 
-import 'LivroLivreCategoriaBook.dart';
+import 'BookSourceCategory.dart';
 import 'YoutubeTaskDownload.dart';
 
 part 'serializers.g.dart';
@@ -29,7 +29,7 @@ part 'serializers.g.dart';
 ///
 /// You usually only need to do this once per project.
 @SerializersFor([
-  LivroLivreCategoriaBook,
+  BookSourceCategory,
   Book,
   ImageLinks,
   VolumeInfo,

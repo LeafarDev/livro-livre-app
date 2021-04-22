@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/page/livro/widget/ListaLivro.dart';
+import 'package:livro_livre_app/page/book/widget/BookList.dart';
 
-class Livros extends StatefulWidget {
+class Books extends StatefulWidget {
   @override
-  LivrosState createState() {
-    return LivrosState();
+  BooksState createState() {
+    return BooksState();
   }
 }
 
-class LivrosState extends State<Livros> {
+class BooksState extends State<Books> {
 
   initState() {
     super.initState();
@@ -21,7 +21,7 @@ class LivrosState extends State<Livros> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child:ListaLivro(apenasFavoritos: false,)
+        child:BookList(onlyFavorites: false,)
       ),
     );
   }

@@ -2,9 +2,10 @@ import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:livro_livre_app/page/Opcoes/Opcoes.dart';
-import 'package:livro_livre_app/page/livro/Favoritos.dart';
-import 'package:livro_livre_app/page/livro/Livros.dart';
+import 'package:livro_livre_app/page/Options/Options.dart';
+
+import 'book/Books.dart';
+import 'book/Favorites.dart';
 
 class App extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    var paginas = [Livros(), Favoritos(), Opcoes()];
+    var pages = [Books(), Favorites(), Options()];
     return new WillPopScope(
         onWillPop: () async => false,
         child: ConnectivityWidget(
@@ -43,7 +44,7 @@ class _AppState extends State<App> {
             ),
           ),
           builder: (context, isOnline) => Scaffold(
-            body: paginas[_currentIndex],
+            body: pages[_currentIndex],
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.orangeAccent,

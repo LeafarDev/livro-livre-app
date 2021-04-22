@@ -4,15 +4,15 @@ import 'package:livro_livre_app/model/YoutubeTaskDownload.dart';
 class AppState {
   String currentAppState = 'resumed';
   int currentBottomBarIndex = 0;
-  Book livroSendoConsumido = null;
-  String tipoMidia = "PDF"; //PDF ou AUDIO
+  Book currentConsumingBook = null;
+  String mediaType = "PDF"; //PDF ou AUDIO
   bool isPlaying = false; // em caso de audio
   AppState();
 
   List<YoutubeTaskDownload> downloadsYt = [];
-  List<String> categorias3 = ["Ensaios"];
-  List<String> selectedCategorias = null;
-  List<String> categorias = [
+  List<String> categories3 = ["Ensaios"];
+  List<String> selectedCategories = null;
+  List<String> categories = [
     "Biografia",
     "Carta",
     "Ciência",
@@ -36,17 +36,17 @@ class AppState {
     "Teatro",
     "Teologia"
   ];
-  List<Book> listaAtualLivros = [];
+  List<Book> currentBookList = [];
 
   AppState.fromAppState(AppState another) {
-    listaAtualLivros = another.listaAtualLivros;
-    selectedCategorias = another.selectedCategorias;
-    categorias = another.categorias;
+    currentBookList = another.currentBookList;
+    selectedCategories = another.selectedCategories;
+    categories = another.categories;
     downloadsYt = another.downloadsYt;
     currentBottomBarIndex = another.currentBottomBarIndex;
     currentAppState = another.currentAppState;
-    livroSendoConsumido = another.livroSendoConsumido;
-    tipoMidia = another.tipoMidia;
+    currentConsumingBook = another.currentConsumingBook;
+    mediaType = another.mediaType;
     isPlaying = another.isPlaying;
   }
 }

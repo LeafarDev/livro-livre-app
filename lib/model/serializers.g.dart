@@ -8,9 +8,9 @@ part of serializers;
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Book.serializer)
+      ..add(BookSourceCategory.serializer)
       ..add(GoogleBookSearchResult.serializer)
       ..add(ImageLinks.serializer)
-      ..add(LivroLivreCategoriaBook.serializer)
       ..add(VolumeInfo.serializer)
       ..add(YoutubeTaskDownload.serializer)
       ..addBuilderFactory(

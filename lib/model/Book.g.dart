@@ -66,10 +66,10 @@ class _$BookSerializer implements StructuredSerializer<Book> {
         ..add(serializers.serialize(object.pdfPath,
             specifiedType: const FullType(String)));
     }
-    if (object.categoria != null) {
+    if (object.category != null) {
       result
-        ..add('categoria')
-        ..add(serializers.serialize(object.categoria,
+        ..add('category')
+        ..add(serializers.serialize(object.category,
             specifiedType: const FullType(String)));
     }
     if (object.audio_path != null) {
@@ -154,8 +154,8 @@ class _$BookSerializer implements StructuredSerializer<Book> {
           result.pdfPath = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'categoria':
-          result.categoria = serializers.deserialize(value,
+        case 'category':
+          result.category = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'audio_path':
@@ -207,7 +207,7 @@ class _$Book extends Book {
   @override
   final String pdfPath;
   @override
-  final String categoria;
+  final String category;
   @override
   final String audio_path;
   @override
@@ -233,7 +233,7 @@ class _$Book extends Book {
       this.extractedTitle,
       this.extractedAuthor,
       this.pdfPath,
-      this.categoria,
+      this.category,
       this.audio_path,
       this.favorite,
       this.currentPositionAudio,
@@ -261,7 +261,7 @@ class _$Book extends Book {
         extractedTitle == other.extractedTitle &&
         extractedAuthor == other.extractedAuthor &&
         pdfPath == other.pdfPath &&
-        categoria == other.categoria &&
+        category == other.category &&
         audio_path == other.audio_path &&
         favorite == other.favorite &&
         currentPositionAudio == other.currentPositionAudio &&
@@ -295,7 +295,7 @@ class _$Book extends Book {
                                             extractedTitle.hashCode),
                                         extractedAuthor.hashCode),
                                     pdfPath.hashCode),
-                                categoria.hashCode),
+                                category.hashCode),
                             audio_path.hashCode),
                         favorite.hashCode),
                     currentPositionAudio.hashCode),
@@ -315,7 +315,7 @@ class _$Book extends Book {
           ..add('extractedTitle', extractedTitle)
           ..add('extractedAuthor', extractedAuthor)
           ..add('pdfPath', pdfPath)
-          ..add('categoria', categoria)
+          ..add('category', category)
           ..add('audio_path', audio_path)
           ..add('favorite', favorite)
           ..add('currentPositionAudio', currentPositionAudio)
@@ -363,9 +363,9 @@ class BookBuilder implements Builder<Book, BookBuilder> {
   String get pdfPath => _$this._pdfPath;
   set pdfPath(String pdfPath) => _$this._pdfPath = pdfPath;
 
-  String _categoria;
-  String get categoria => _$this._categoria;
-  set categoria(String categoria) => _$this._categoria = categoria;
+  String _category;
+  String get category => _$this._category;
+  set category(String category) => _$this._category = category;
 
   String _audio_path;
   String get audio_path => _$this._audio_path;
@@ -406,7 +406,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
       _extractedTitle = _$v.extractedTitle;
       _extractedAuthor = _$v.extractedAuthor;
       _pdfPath = _$v.pdfPath;
-      _categoria = _$v.categoria;
+      _category = _$v.category;
       _audio_path = _$v.audio_path;
       _favorite = _$v.favorite;
       _currentPositionAudio = _$v.currentPositionAudio;
@@ -445,7 +445,7 @@ class BookBuilder implements Builder<Book, BookBuilder> {
               extractedTitle: extractedTitle,
               extractedAuthor: extractedAuthor,
               pdfPath: pdfPath,
-              categoria: categoria,
+              category: category,
               audio_path: audio_path,
               favorite: favorite,
               currentPositionAudio: currentPositionAudio,

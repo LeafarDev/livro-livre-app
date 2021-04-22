@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:livro_livre_app/database/LivroDatabase.dart';
+import 'package:livro_livre_app/database/BookDatabase.dart';
 import 'package:livro_livre_app/model/Book.dart';
 
 class PdfViewerPage extends StatefulWidget {
@@ -67,7 +67,7 @@ class _PdfViewerPageState extends State<PdfViewerPage>
             pdfViewController.setPage(_book.currentPage != null ? _book.currentPage : 0);
           },
           onPageChanged: (int page, int total) async {
-            await LivroDatabase().updateCurrentPage(_book.id, page);
+            await BookDatabase().updateCurrentPage(_book.id, page);
           },
         ));
   }
