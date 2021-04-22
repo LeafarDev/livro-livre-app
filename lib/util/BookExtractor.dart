@@ -10,40 +10,38 @@ import 'package:livro_livre_app/util/ramdom.dart';
 class BookExtractor {
   var _bookList = [];
 
-  processarExtracaoLivro() async {
-    // PRECISO DEFINIR A PERIODICIDADE DA EXTRAÇÃO DO SITE
+  proccessBookExtraction() async {
     if (_bookList.isEmpty) {
       var categories = store.state.categories;
       print("loadData");
       for (var i = 0; i < categories.length; i++) {
-        processarExtracaoLivrocategory(categories[i]);
+        proccessBookExtractionCategory(categories[i]);
       }
     }
     return true;
   }
 
-  Future processarExtracaoLivrocategory(String category) async {
+  Future proccessBookExtractionCategory(String category) async {
     print(
         "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<${category}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     var bookList = await categoryBookExtractor()
         .extractBookByCategory(category: category);
     if (bookList.isNotEmpty) {
       for (var j = 0; j < bookList.length; j++) {
-        preparacaoEInsertDados(bookList[j], category);
+        insertDataPreparation(bookList[j], category);
       }
     } else {
       print("has no more ${bookList.length}");
     }
   }
 
-  Future preparacaoEInsertDados(livroExtraido, String category) async {
+  Future insertDataPreparation(livroExtraido, String category) async {
     var exists = await BookDatabase().chechIfBookExists(livroExtraido[2]);
     print("exists ? =>" + exists.toString());
     if (exists == false) {
       var book =
       await BookApi().googleBooksApi(livroExtraido[1], livroExtraido[0]);
       if (book != null) {
-        // adiciona link do pdf e referencia do audio se houver
         var bookObj = jsonDecode(book.toJson());
         bookObj["extracted_title"] = livroExtraido[1];
         bookObj["category"] = category;
@@ -53,7 +51,6 @@ class BookExtractor {
         book = Book.fromJson(jsonEncode(bookObj));
         jsonEncode({"pdfLink": livroExtraido[2], "ytCode": livroExtraido[3]});
       } else {
-        // book padrao, caso não haja no google api
         book = Book.fromJson(jsonEncode({
           "id": RandomString(12),
           "category": category,
@@ -67,8 +64,8 @@ class BookExtractor {
           }
         }));
       }
-      var inserrt = await BookDatabase().insert(book.toSqlFormat());
-      print("chegou no insert" + inserrt.toString());
+      var insert = await BookDatabase().insert(book.toSqlFormat());
+      print("chegou no insert" + insert.toString());
     }
   }
 }

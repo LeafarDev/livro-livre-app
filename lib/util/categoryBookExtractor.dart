@@ -20,12 +20,9 @@ class categoryBookExtractor {
     if (response.statusCode == 200) {
       var document = parse(response.body);
       document.body.children.forEach((domPrex.Element element) {
-        // processa title e link do pdf
         element.innerHtml.toString().split(" ").forEach((part) {
           if (_regHref.hasMatch(part.trim().toString())) {
-            // pego apenas o link
             var link = part.split('"')[1];
-            // show
             _arrayBook.add([
               ..._extractTitleAuthor(document, link, category),
               ...[link.toString()]
@@ -68,7 +65,6 @@ class categoryBookExtractor {
     if (splitDashTitle.length == 1) {
       title = textBeforeUrlWithName;
     } else {
-      // tamanho split
       var lengthSplitDashTitle = splitDashTitle.length;
       // author
       var untreatedAuthor = splitDashTitle[lengthSplitDashTitle - 2];
@@ -105,7 +101,6 @@ class categoryBookExtractor {
           .split('href="https://www.youtube.com/watch?v=') as List;
       var watchYt = "";
       if (chunksHref.length > 1) {
-        // pega exclusicamente a url
         List<String> splitListYt = chunksHref[1].split('"') as List;
         if (chunksHref.length > 0 && splitListYt.length > 0) {
           watchYt = chunksHref[1].split('"')[0];
@@ -113,8 +108,6 @@ class categoryBookExtractor {
           watchYt = null;
         }
       }
-      // verifica se essa url capturada pertence ao livro atual ou
-      // aos próximos da interação
       var found = false;
       var nextIndex = index + 1;
       if (index == (_arrayBook.length - 1)) {
@@ -130,17 +123,15 @@ class categoryBookExtractor {
           break;
         }
       }
-      // caso tenha achado no próximos eu defino o watchYt como vazio
       if (found == true) {
         watchYt = "";
       }
       print("found ?" + found.toString() + ">>" + watchYt);
-      // se houver outra informação com o código, como tempo, remove. (ex: &t=27s)
+      // remove time code (ex: &t=27s)
       var watchYtSplit = watchYt.split("&");
       if (watchYtSplit.length > 1) {
         watchYt = watchYtSplit[0];
       }
-      // salvar adiciona watchYtToSave
       print("${value[1]}  --- $watchYt");
       print("fly high$index");
       _arrayBook[index] = [

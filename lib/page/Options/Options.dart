@@ -16,7 +16,6 @@ class Options extends StatefulWidget {
 class OptionsState extends State<Options> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SafeArea(
       child: Center(
         child: Column(
@@ -50,7 +49,7 @@ class OptionsState extends State<Options> {
                 await BookDatabase().createDatabase();
                 await db.execute('drop table book;');
                 await BookDatabase().createDatabase();
-                await BookExtractor().processarExtracaoLivro();
+                await BookExtractor().proccessBookExtraction();
                 // Get the stream info for the passed video
                 // var dir = await getExternalStorageDirectory();
 //          audioPlugin.stop();

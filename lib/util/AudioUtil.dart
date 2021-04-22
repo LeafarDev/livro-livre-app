@@ -83,8 +83,8 @@ class AudioUtil {
       print("||||||||||||||||||||||||||||||||||||||||||\n");
       await output.close();
       await BookDatabase().updateCurrentAudioPath(book.id, filePath);
-      var bookAtualizado = await BookDatabase().getById(book.id);
-      store.dispatch(SetCurrentConsumingBookState(bookAtualizado));
+      var updatedBook = await BookDatabase().getById(book.id);
+      store.dispatch(SetCurrentConsumingBookState(updatedBook));
       return filePath;
     }
   }

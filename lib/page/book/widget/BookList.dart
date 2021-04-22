@@ -215,14 +215,12 @@ class BookListState extends State<BookList> {
           }
           return false;
         });
-        // print("não found categories" + item.category);
         if (categorySearch.length == 0) {
           return false;
         }
       }
       if (text != "") {
         LongestCommonSubsequence d = new LongestCommonSubsequence();
-        // verificando aproximidade do titulo
         var titleDistance = d.distance(text, item.extractedTitle);
         var authorDistance = d.distance(text, item.extractedAuthor);
         if (titleDistance <= authorDistance) {
